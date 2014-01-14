@@ -45,6 +45,14 @@ function select_hunpos_binary {
 	ln -f -s ../LIBS-LOCAL/hunpos/hunpos-tag hunpos-tag
 	return 0
     fi
+    #Does the older pre-compiled version work?
+    echo "koira" | ../LIBS-LOCAL/hunpos/hunpos-tag-64bit-glibc-2.10 ../model/hunpos.model > /dev/null 2>&1
+    if (( $? == 0 ))
+    then
+	#yes, symlink it
+	ln -f -s ../LIBS-LOCAL/hunpos/hunpos-tag-64bit-glibc-2.10 hunpos-tag
+	return 0
+    fi    
     echo
     echo "Couldn't get HunPOS to work"
     echo
