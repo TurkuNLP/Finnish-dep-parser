@@ -8,7 +8,7 @@ Download
 
 Choose whichever option suits you best:
 
-* Download the latest versioned release by following the *releases* link on the top link bar
+* Download the latest versioned release from the [release archive](https://github.com/fginter/Finnish-dep-parser/releases)
 * Clone the repository `git clone https://github.com/fginter/Finnish-dep-parser.git` 
 * Download the current source code using the *Download ZIP* link on the right-hand side.
 
