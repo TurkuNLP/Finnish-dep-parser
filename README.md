@@ -6,7 +6,11 @@ This repository holds the dependency parsing pipeline being developed by the [Un
 Download
 ========
 
-You can either git clone the repository `git clone -b alpha https://github.com/fginter/Finnish-dep-parser.git` or download it using the *Download ZIP* link on the right-hand side.
+Choose whichever option suits you best:
+
+* Download the latest versioned release by following the *releases* link on the top link bar
+* Clone the repository `git clone https://github.com/fginter/Finnish-dep-parser.git` 
+* Download the current source code using the *Download ZIP* link on the right-hand side.
 
 Installation and prerequisites
 ==============================
