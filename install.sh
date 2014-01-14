@@ -78,17 +78,17 @@ runc mkdir -p LIBS
 runc cd LIBS
 
 echoc "Downloading Omorfi java implementation (morphological analyzer)"
-runc wget -nc http://sourceforge.net/projects/hfst/files/optimized-lookup/hfst-ol.jar/download -O hfst-ol.jar
+runc wget http://sourceforge.net/projects/hfst/files/optimized-lookup/hfst-ol.jar/download -O hfst-ol.jar
 
 echoc "Downloading the parser binary from http://mate-tools.googlecode.com/files/anna-3-1.jar"
-runc wget -nc http://mate-tools.googlecode.com/files/anna-3-1.jar
+runc wget http://mate-tools.googlecode.com/files/anna-3-1.jar
 
 echoc "Downloading Apache OpenNLP (sentence splitter and tokenizer)"
-runc wget -nc http://mirror.netinch.com/pub/apache/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
+runc wget http://mirror.netinch.com/pub/apache/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
 runc tar zxf apache-opennlp-1.5.3-bin.tar.gz
 
 echoc "Downloading the POS tagger binary from http://hunpos.googlecode.com/files/hunpos-1.0-linux.tgz"
-runc wget -nc http://hunpos.googlecode.com/files/hunpos-1.0-linux.tgz
+runc wget http://hunpos.googlecode.com/files/hunpos-1.0-linux.tgz
 runc tar zxf hunpos-1.0-linux.tgz
 runc select_hunpos_binary  #This checks which hunpos works (the downloaded binary, or the binary included here) and makes a symlink to LIBS/hunpos-tag
 
