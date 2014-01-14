@@ -18,7 +18,12 @@ On most systems, all you need is to run the `install.sh` script, which will down
 * [HunPOS](http://code.google.com/p/hunpos/) for morphological disambiguation (tagging)
 * [mate-tools](https://code.google.com/p/mate-tools/) for dependency parsing
 
-Of these, all but HunPOS are Java programs and tend to work fine anywhere. HunPOS is a binary distribution and generally works OK, but on some systems (possibly 64-bit systems lacking 32-bit code support) we needed to re-compile it from sources.
+Of these, all but HunPOS are Java programs and tend to work fine anywhere. 
+
+If HunPOS doesn't run
+=====================
+
+HunPOS is a binary distribution and works OK on some systems and not so much on others.
 
 Parsing plain text
 ==================
