@@ -72,6 +72,8 @@ if __name__=="__main__":
         
         while predictions[-1]==[u''] or not predictions[-1]:
             predictions.pop(-1)
+        while lines[-1]==u'':
+            lines.pop(-1)
         
         newSent=True
         assert len(lines)==len(predictions), (len(lines),len(predictions))
