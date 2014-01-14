@@ -23,7 +23,7 @@ Of these, all but HunPOS are Java programs and tend to work fine anywhere.
 If HunPOS doesn't run
 =====================
 
-HunPOS is a binary distribution and works OK on some systems and not so much on others.
+HunPOS is a binary distribution and works OK on some systems and not so much on others. If the install script cannot make it work, try to compile it yourself (it's typically very easy) and copy `hunpos-tag` into the LIBS directory. Everything should work fine after that.
 
 Parsing plain text
 ==================
