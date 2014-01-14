@@ -27,5 +27,15 @@ Parsing CoNLL-09 formatted input
     
     cat input.conll09 | ./tag.sh | ./parse.sh > output.conll09
     
+Testing
+=======
+
+The `data` directory contains two files: `wiki-test.txt` is a small piece of text from the Finnish Wikipedia and `tdt_test_set.conll09` is the (blank) official test set of the TDT treebank. You can parse these files as follows:
+
+    cat data/wiki-test.txt | ./parser_wrapper.sh > wiki-test-parsed.txt
+    cat data/tdt_test_set.conll09 | ./tag.sh | ./parse.sh > tdt_test_set_parsed.conll09
+    
+To check that everything went fine, you can upload `tdt_test_set_parsed.conll09` to [the TDT treebank test service](http://bionlp-www.utu.fi/tdteval/) and check that the LAS is just above 81%.
+    
 
     
