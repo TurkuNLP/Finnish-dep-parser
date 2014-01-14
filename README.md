@@ -1,12 +1,12 @@
 Finnish-dep-parser
 ==================
 
-This repository holds the dependency parsing pipeline being developed by the [University of Turku NLP group](http://bionlp.utu.fi). This is a work in progress and should be considered "early beta". A version of this pipeline was used to parse 1.5B tokens of text; it is relatively stable but still a research prototype.
+This repository holds the dependency parsing pipeline being developed by the [University of Turku NLP group](http://bionlp.utu.fi). This is a work in progress and should be considered alpha-grade experimental code. A version of this pipeline was used to parse 1.5B tokens of text, though, so it is relatively stable if it runs on your system.
 
 Download
 ========
 
-You can either git clone the repository `git clone https://github.com/fginter/Finnish-dep-parser.git` or download it using the *Download ZIP* link on the right-hand side.
+You can either git clone the repository `git clone -b alpha https://github.com/fginter/Finnish-dep-parser.git` or download it using the *Download ZIP* link on the right-hand side.
 
 Installation and prerequisites
 ==============================
