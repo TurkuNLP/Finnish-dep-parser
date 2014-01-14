@@ -5,7 +5,7 @@ THIS=`pwd` #Where am I?
 SCRIPT=`dirname $0` #where is this script?
 cd $SCRIPT
 
-PATH=$PATH:$THIS/LIBS/apache-opennlp-1.5.2-incubating/bin/
+PATH=$PATH:$THIS/LIBS/apache-opennlp-1.5.3/bin/
 
 ## Uncomment for real temp directory
 ## Also uncomment the last line to get it deleted
@@ -14,7 +14,7 @@ TMPDIR=tmp_data ; mkdir -p $TMPDIR #fixed tmpdir, comment out if you uncomment t
 
 #1) sentence-split, tokenize, and convert to CoNLL'09 format
 
-cat | opennlp SentenceDetector model/fi-sent.bin | opennlp TokenizerME model/fi-token.bin | $PYTHON conllUtil.py --txt_to_09 > $TMPDIR/input.conll09
+cat | opennlp SentenceDetector model/fi-sent.bin | opennlp TokenizerME model/fi-token.bin | $PYTHON txt_to_09.py > $TMPDIR/input.conll09
 
 #2) tag the input, and fill in lemmas
 

@@ -46,8 +46,8 @@ runc wget http://hunpos.googlecode.com/files/hunpos-1.0-linux.tgz
 runc tar zxf hunpos-1.0-linux.tgz
 
 echoc "Downloading Apache OpenNLP (sentence splitter and tokenizer)"
-runc wget http://www.nic.funet.fi/pub/mirrors/apache.org//incubator/opennlp/apache-opennlp-1.5.2-incubating-bin.tar.gz
-runc tar zxf apache-opennlp-1.5.2-incubating-bin.tar.gz
+runc wget http://mirror.netinch.com/pub/apache/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
+runc tar zxf apache-opennlp-1.5.3-bin.tar.gz
 
 runc cd ..
 echo "SUCCESS"
