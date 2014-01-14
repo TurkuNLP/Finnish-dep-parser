@@ -6,11 +6,26 @@ This repository holds the dependency parsing pipeline being developed by the [Un
 Installation and prerequisites
 ==============================
 
-On most systems, all you need is to run the `install.sh` script, which will download and test all of the necessary pre-requisites. The script downloads pipeline relies on several external tools:
+On most systems, all you need is to run the `install.sh` script, which will download and test all of the necessary pre-requisites. You'll need to have Java and Python 2.X installed. The script downloads the external tools needed to run the pipeline:
 
 * [OpenNLP](http://opennlp.apache.org) for sentence splitting and tokenization
 * [OMorFi](http://code.google.com/p/omorfi/) and [HFST optimized lookup](http://sourceforge.net/projects/hfst/files/optimized-lookup/) for morphological analysis
 * [HunPOS](http://code.google.com/p/hunpos/) for morphological disambiguation (tagging)
 * [mate-tools](https://code.google.com/p/mate-tools/) for dependency parsing
 
-Of these, all but HunPOS are Java programs and tend to work fine. HunPOS generally works, but on some systems we needed to re-compile it from sources.
+Of these, all but HunPOS are Java programs and tend to work fine anywhere. HunPOS is a binary distribution and generally works OK, but on some systems (possibly 64-bit systems lacking 32-bit code support) we needed to re-compile it from sources.
+
+Parsing plain text
+==================
+
+The following command will run the entire pipeline (sentence splitting, tokenization, tagging, parsing) on a text file. All programs throughout the pipeline expect *UTF-8* as text encoding.
+
+    cat sometext.txt | ./parser_wrapper.sh > output.conll09
+
+Parsing CoNLL-09 formatted input
+================================
+    
+    cat input.conll09 | ./tag.sh | ./parse.sh > output.conll09
+    
+
+    
