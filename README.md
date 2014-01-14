@@ -6,12 +6,11 @@ This repository holds the dependency parsing pipeline being developed by the [Un
 Installation and prerequisites
 ==============================
 
-The pipeline relies on several external tools:
+On most systems, all you need is to run the `install.sh` script, which will download and test all of the necessary pre-requisites. The script downloads pipeline relies on several external tools:
 
 * [OpenNLP](http://opennlp.apache.org) for sentence splitting and tokenization
 * [OMorFi](http://code.google.com/p/omorfi/) and [HFST optimized lookup](http://sourceforge.net/projects/hfst/files/optimized-lookup/) for morphological analysis
 * [HunPOS](http://code.google.com/p/hunpos/) for morphological disambiguation (tagging)
 * [mate-tools](https://code.google.com/p/mate-tools/) for dependency parsing
 
- 
-
+Of these, all but HunPOS are Java programs and tend to work fine. HunPOS generally works, but on some systems we needed to re-compile it from sources.
