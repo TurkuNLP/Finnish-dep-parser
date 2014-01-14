@@ -7,7 +7,7 @@ THIS=`pwd` #Where am I?
 SCRIPT=`dirname $0` #where is this script?
 cd $SCRIPT
 
-export PATH=$PATH:$THIS/LIBS/apache-opennlp-1.5.3/bin/:$THIS/LIBS-LOCAL/hunpos
+export PATH=$PATH:$THIS/LIBS/apache-opennlp-1.5.3/bin/:$THIS/LIBS
 
 ## Uncomment for real temp directory
 #export TMPDIR=`mktemp -d --tmpdir=.` || exit #Get me a temporary directory for intermediate files or die
