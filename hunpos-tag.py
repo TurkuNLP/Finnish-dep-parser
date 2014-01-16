@@ -3,6 +3,7 @@ import sys
 import os
 import re
 import unicodedata as udata
+import subprocess
 
 import omorfi_pos as omor
 
@@ -62,7 +63,17 @@ if __name__=="__main__":
         f.close()
         fM.close()
         #Now invoke hunpos
-        os.system("%s %s -m %s/hunpos_in_mtable < %s/hunpos_in > %s/hunpos_out"%(options.hunposbin,options.predict,options.tempdir,options.tempdir,options.tempdir))
+        fIN=open(os.path.join(options.tempdir,"hunpos_in"),"r")
+        fOUT=open(os.path.join(options.tempdir,"hunpos_out"),"w")
+        fERR=open(os.path.join(options.tempdir,"hunpos_errout"),"w")
+        args=[options.hunposbin,options.predict,"-m",os.path.join(options.tempdir,"hunpos_in_mtable")]
+        p=subprocess.call(args,stdin=fIN,stdout=fOUT,stderr=fERR)
+        #os.system("%s %s -m %s/hunpos_in_mtable < %s/hunpos_in > %s/hunpos_out"%(options.hunposbin,options.predict,options.tempdir,options.tempdir,options.tempdir))
+        fIN.close()
+        fOUT.flush()
+        fOUT.close()
+        fERR.flush()
+        fERR.close()
         f=codecs.open(os.path.join(options.tempdir,"hunpos_out"),"rt","utf-8")
         predictions=[]
         for line in f: #reads in HunPos predictions
