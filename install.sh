@@ -23,44 +23,36 @@ function checkc {
 }
 
 function select_hunpos_binary {
+    echo "Selecting the HunPOS binary to run:"
     #Do we already have a working hunpos-tag in LIBS?
-    echo "koira" | hunpos-tag ../model/hunpos.model > /dev/null 2>&1
+    echo "koira" | ./hunpos-tag ../model/hunpos.model > /dev/null 2>&1
     if (( $? == 0 ))
     then
+	echo "...seems to have been done already, works."
 	return 0
     fi
-    #Does the downloaded version work?
-    echo "koira" | hunpos-1.0-linux/hunpos-tag ../model/hunpos.model > /dev/null 2>&1
-    if (( $? == 0 ))
-    then
-	#yes, symlink it
-	ln -f -s hunpos-1.0-linux/hunpos-tag hunpos-tag
-	return 0
-    fi
-    #Does the pre-compiled version work?
-    echo "koira" | ../LIBS-LOCAL/hunpos/hunpos-tag ../model/hunpos.model > /dev/null 2>&1
-    if (( $? == 0 ))
-    then
-	#yes, symlink it
-	ln -f -s ../LIBS-LOCAL/hunpos/hunpos-tag hunpos-tag
-	return 0
-    fi
-    #Does the older pre-compiled version work?
-    echo "koira" | ../LIBS-LOCAL/hunpos/hunpos-tag-64bit-glibc-2.10 ../model/hunpos.model > /dev/null 2>&1
-    if (( $? == 0 ))
-    then
-	#yes, symlink it
-	ln -f -s ../LIBS-LOCAL/hunpos/hunpos-tag-64bit-glibc-2.10 hunpos-tag
-	return 0
-    fi    
+
+    #Try the distributed binaries until you find one which works
+    for huntag in ../LIBS-LOCAL/hunpos/hunpos-tag-*
+    do
+	echo "Trying $huntag"
+	echo "koira" | $huntag ../model/hunpos.model > /dev/null 2>&1
+	if (( $? == 0 ))
+	then
+	#it works! symlink it
+	    echo "Works. Selecting it"
+	    ln -f -s $huntag ./hunpos-tag
+	    return 0
+	fi
+    done
     echo
-    echo "Couldn't get HunPOS to work"
+    echo "Couldn't get any of the HunPOS binaries in LIBS-LOCAL/hunpos to work"
     echo
     echo "Try to compile it yourself by following the commands in LIBS-LOCAL/hunpos/compile-hunpos.sh"
-    echo "If you can make the program hunpos-tag to run, copy or symlink it as LIBS/hunpos-tag"
+    echo "If you can make the program hunpos-tag to run, copy or symlink it as LIBS/hunpos-tag and"
+    echo "kindly contribute the compiled binary to the project: ginter@cs.utu.fi   Thank you!"
     return 1
 }
-    
     
 
 function echoc {
@@ -87,9 +79,6 @@ echoc "Downloading Apache OpenNLP (sentence splitter and tokenizer)"
 runc wget http://mirror.netinch.com/pub/apache/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
 runc tar zxf apache-opennlp-1.5.3-bin.tar.gz
 
-echoc "Downloading the POS tagger binary from http://hunpos.googlecode.com/files/hunpos-1.0-linux.tgz"
-runc wget http://hunpos.googlecode.com/files/hunpos-1.0-linux.tgz
-runc tar zxf hunpos-1.0-linux.tgz
 runc select_hunpos_binary  #This checks which hunpos works (the downloaded binary, or the binary included here) and makes a symlink to LIBS/hunpos-tag
 
 runc cd ..
