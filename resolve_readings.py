@@ -3,7 +3,11 @@
 import re
 import sys
 import omorfi_pos
-OmorTransducer=omorfi_pos.OmorTransducer #hfst_lookup.Transducer("/opt/omorfi-svn/share/hfst/fi/generation.finntreebank.hfstol")
+import omorfi_wrapper
+import os
+
+SCRIPTDIR=os.path.dirname(os.path.abspath(__file__))
+OmorTransducer=omorfi_wrapper.OmorfiWrapper(os.path.join(SCRIPTDIR,"model/generation.finntreebank.hfstol"))
 
 atRe=re.compile(ur"@[A-Za-z.]+@",re.U) #The @....@ tags in the transducer output, want to get rid of them
 
