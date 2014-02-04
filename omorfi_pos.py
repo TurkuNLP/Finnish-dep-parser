@@ -92,6 +92,11 @@ for cat_tag in raw_tag_information.split(u","):
     tag_cat_dict[tag]=cat
     cat_tag_dict.setdefault(cat,[]).append(tag)
 
+
+class CompoundElement (object):
+
+    pass
+
 #print cat_tag_dict[u"POS"]
 #sys.exit()    
 
