@@ -1,3 +1,8 @@
+---
+layout: base
+title:  'Finnish dependency parser'
+---
+
 Finnish-dep-parser
 ==================
 
