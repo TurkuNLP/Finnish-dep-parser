@@ -4,7 +4,7 @@
 import os
 import sys
 import logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 
 import subprocess
 
@@ -22,7 +22,7 @@ class OmorfiWrapper(object):
 
         try:
             self.log.info("Starting hfst-ol.jar")
-            self.process = subprocess.Popen(["java","-Xmx100m","-jar", os.path.join(SCRIPTDIR,"LIBS/hfst-ol.jar"), transducer_file], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.process = subprocess.Popen(["java","-jar", os.path.join(SCRIPTDIR,"LIBS","hfst-ol.jar"), transducer_file], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             if self.process.returncode!=None: #Ended already - something's wrong
                 self.log.debug("Non-zero exit code for hfst-ol.jar")
                 raise HFSTError()
