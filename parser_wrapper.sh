@@ -10,6 +10,12 @@ source init.sh
 
 cat $TMPDIR/input.conll09 | ./tag.sh > $TMPDIR/input_tagged.conll09
 
+if [[ $? -ne 0 ]]
+then
+    echo "Tagging of the input failed. Please check the error messages above for any help" 1>&2
+    exit 1
+fi
+
 #3) parse
 
 cat $TMPDIR/input_tagged.conll09 | ./parse.sh  > $TMPDIR/input_parsed.conll09
