@@ -11,7 +11,7 @@ This project holds the dependency parsing pipeline being developed by the [Unive
 
 Choose whichever option suits you best:
 
-* Clone the repository `git clone https://github.com/fginter/Finnish-dep-parser.git` 
+* Clone the repository `git clone https://github.com/TurkuNLP/Finnish-dep-parser.git` 
 * Download the current source code using the *Download ZIP* link of [the project GitHub repository](https://github.com/TurkuNLP/Finnish-dep-parser)
 
 # Installation and prerequisites
