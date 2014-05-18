@@ -1,1 +1,3 @@
+name: Finnish-dep-parser
 markdown: kramdown
+pygments: true
