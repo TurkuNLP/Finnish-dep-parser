@@ -4,10 +4,14 @@ import os
 import re
 import unicodedata as udata
 import subprocess
+import logging
+logging.basicConfig(level=logging.WARNING)
 
+import traceback
 import omorfi_pos as omor
 
 if __name__=="__main__":
+    log = logging.getLogger("omorfi")
     from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-t", "--train", dest="train",action="store_true",default=False, help="Prepare training data")
@@ -63,23 +67,32 @@ if __name__=="__main__":
         f.close()
         fM.close()
         #Now invoke hunpos
-        fIN=open(os.path.join(options.tempdir,"hunpos_in"),"r")
-        fOUT=open(os.path.join(options.tempdir,"hunpos_out"),"w")
-        fERR=open(os.path.join(options.tempdir,"hunpos_errout"),"w")
-        args=[options.hunposbin,options.predict,"-m",os.path.join(options.tempdir,"hunpos_in_mtable")]
-        p=subprocess.call(args,stdin=fIN,stdout=fOUT,stderr=fERR)
-        #os.system("%s %s -m %s/hunpos_in_mtable < %s/hunpos_in > %s/hunpos_out"%(options.hunposbin,options.predict,options.tempdir,options.tempdir,options.tempdir))
-        fIN.close()
-        fOUT.flush()
-        fOUT.close()
-        fERR.flush()
-        fERR.close()
-        f=codecs.open(os.path.join(options.tempdir,"hunpos_out"),"rt","utf-8")
-        predictions=[]
-        for line in f: #reads in HunPos predictions
-            line=line.strip()
-            predictions.append(line.split(u"\t"))
-        f.close()
+        try:
+            fIN=open(os.path.join(options.tempdir,"hunpos_in"),"r")
+            fOUT=open(os.path.join(options.tempdir,"hunpos_out"),"w")
+            fERR=open(os.path.join(options.tempdir,"hunpos_errout"),"w")
+            args=[options.hunposbin,options.predict,"-m",os.path.join(options.tempdir,"hunpos_in_mtable")]
+            p=subprocess.call(args,stdin=fIN,stdout=fOUT,stderr=fERR)
+            fIN.close()
+            fOUT.flush()
+            fOUT.close()
+            fERR.flush()
+            fERR.close()
+
+            f=codecs.open(os.path.join(options.tempdir,"hunpos_out"),"rt","utf-8")
+            predictions=[]
+            for line in f: #reads in HunPos predictions
+                line=line.strip()
+                predictions.append(line.split(u"\t"))
+            f.close()
+
+            if len(predictions)==0:
+                raise ValueError("Empty predictions from hunpos in %s"%(os.path.join(options.tempdir,"hunpos_out")))
+        except:
+            traceback.print_exc()
+            log.error("""Did not succeed in launching 'LIBS/%s'. The most common reason for this is that you forgot to run './install.sh'. \n\nIf you get this message even though you did succeed with ./install.sh, it means that the local installation of hunpos is not operating correctly. Try to run the above command, feed into it "koira koira koira koira", one word per line, then one more empty line, and you should get a tagged output. See if there's any obvious problem. Then either open an issue at https://github.com/TurkuNLP/Finnish-dep-parser/issues  or email ginter@cs.utu.fi and jmnybl@utu.fi and we'll try to help you.\n\nGiving up, because the parser cannot run without a tagger."""%(" ".join(args)))
+            sys.exit(1)
+
         
         while predictions[-1]==[u''] or not predictions[-1]:
             predictions.pop(-1)

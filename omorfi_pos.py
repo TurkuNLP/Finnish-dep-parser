@@ -92,6 +92,11 @@ for cat_tag in raw_tag_information.split(u","):
     tag_cat_dict[tag]=cat
     cat_tag_dict.setdefault(cat,[]).append(tag)
 
+
+class CompoundElement (object):
+
+    pass
+
 #print cat_tag_dict[u"POS"]
 #sys.exit()    
 
@@ -412,6 +417,7 @@ if __name__=="__main__":
     from optparse import OptionParser
     parser = OptionParser(usage="python omorfi_pos.py [options]")
     parser.add_option("-n", "--no-interactive", dest="interactive", action="store_false", default=True, help="Don't use the interactive prompt, read the data from stdin")
+    parser.add_option("-o", "--orig", dest="orig", action="store_true", default=False, help="Return tags as originally defined in Omorfi.")
     (options, args) = parser.parse_args()
     
     
@@ -429,7 +435,12 @@ if __name__=="__main__":
                 print
             else:
                 for r in readings:
-                    print (u"-- "+r).encode("utf-8")
+                    if options.orig==False:
+                        lemma,taglist=analyze_reading(r)
+                        pos,tags=analyze_taglist(taglist,retForm=RET_POS_FEAT)
+                        print lemma.encode(u"utf-8"),pos.encode(u"utf-8"),tags.encode(u"utf-8")
+                    else:
+                        print r.encode("utf-8")
                 print
     else:
         for token in sys.stdin:
@@ -440,5 +451,11 @@ if __name__=="__main__":
             if not readings:
                 readings.append(u"--unrecognized--")
             for r in readings:
-                print (token+u"\t"+r).encode("utf-8")
+                if options.orig==False:
+                    lemma,taglist=analyze_reading(r)
+                    pos,tags=analyze_taglist(taglist,retForm=RET_POS_FEAT)
+                    print (token+u"\t"+lemma).encode(u"utf-8"),pos.encode(u"utf-8"),tags.encode(u"utf-8")
+                else:
+                    print (token+u"\t"+r).encode("utf-8")
+                #print (token+u"\t"+r).encode("utf-8")
             print
