@@ -449,13 +449,16 @@ if __name__=="__main__":
                 continue
             readings=omorfi_lookup(token)
             if not readings:
-                readings.append(u"--unrecognized--")
+                print (token+u"\t+?").encode(u"utf-8")
             for r in readings:
                 if options.orig==False:
-                    lemma,taglist=analyze_reading(r)
-                    pos,tags=analyze_taglist(taglist,retForm=RET_POS_FEAT)
-                    print (token+u"\t"+lemma).encode(u"utf-8"),pos.encode(u"utf-8"),tags.encode(u"utf-8")
+                    try:
+                        lemma,taglist=analyze_reading(r)
+                        pos,tags=analyze_taglist(taglist,retForm=RET_POS_FEAT)
+                        print (token+u"\t"+lemma).encode(u"utf-8"),pos.encode(u"utf-8"),tags.encode(u"utf-8")
+                    except:
+                        pass
+                        
                 else:
                     print (token+u"\t"+r).encode("utf-8")
-                #print (token+u"\t"+r).encode("utf-8")
             print
