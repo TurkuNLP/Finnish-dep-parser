@@ -159,6 +159,7 @@ RET_DICT=0 #Return dictionary (cat:tag)
 RET_LIST=1 #Return list [tag,tag,None,tag,None,tag,...] for every category in cat_list (see above)
 RET_TUPLE=4 #Return tuple (tag,tag,None,tag,None,tag,...) for every category in cat_list (see above)
 RET_POS_FEAT=2 #Return a tuple( POS, tagString ) to be put into CoNLL-style data
+RET_POS_FEAT_TDT=3 #Return a tuple( POS, tagString ) to be put into CoNLL-style data, tdt-style with underscores
 #Raises ValueError if something goes haywire
 def analyze_taglist(tags,retForm=RET_LIST):
     ct_dict=_raw_analyze_taglist(tags)
@@ -171,6 +172,10 @@ def analyze_taglist(tags,retForm=RET_LIST):
     elif retForm==RET_POS_FEAT:
         pos=ct_dict[u"POS"]
         tagString=u"|".join(cat+u":"+ct_dict[cat] for cat in cat_list if cat!=u"POS" and cat in ct_dict)
+        return pos,tagString
+    elif retForm==RET_POS_FEAT_TDT:
+        pos=ct_dict[u"POS"]
+        tagString=u"|".join(cat+u"_"+ct_dict[cat] for cat in cat_list if cat!=u"POS" and cat in ct_dict)
         return pos,tagString
 
 UNIQUE_NOLEMMA=0
@@ -196,7 +201,10 @@ def analyze_reading(reading):
         reading=unicode(reading,"utf-8")
     if reading.endswith(u"+?"):
         return reading[:-2],[]
-    compoundParts=reading.split(u"+") #TODO: what if "+" is part of the token? ;)
+    if reading.startswith(u"+<"):
+        compoundParts=[reading]
+    else:
+        compoundParts=reading.split(u"+") #TODO: what if "+" is part of the token? ;)
     lemma=[]
     for compoundPart in compoundParts:
         if compoundPart.startswith(u"#") and len(compoundPart)>1 and compoundPart!=u"#<Punct>":
@@ -454,7 +462,7 @@ if __name__=="__main__":
                 if options.orig==False:
                     try:
                         lemma,taglist=analyze_reading(r)
-                        pos,tags=analyze_taglist(taglist,retForm=RET_POS_FEAT)
+                        pos,tags=analyze_taglist(taglist,retForm=RET_POS_FEAT_TDT)
                         print (token+u"\t"+lemma).encode(u"utf-8"),pos.encode(u"utf-8"),tags.encode(u"utf-8")
                     except:
                         pass
