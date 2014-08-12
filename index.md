@@ -38,6 +38,12 @@ The following command will run the entire pipeline (sentence splitting, tokeniza
 # Parsing CoNLL-09 formatted input
     
     cat input.conll09 | ./tag.sh | ./parse.sh > output.conll09
+
+# Visualizing trees
+
+Parser output trees can by visualized by using the following command and opening the resulting .html file in web browser. By default, it shows first 50 trees, use the --max_sent parameter to adjust the number of trees shown.
+
+    cat output.conll09 | python visualize.py > output.html
     
 # Testing
 
