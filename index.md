@@ -41,7 +41,7 @@ The following command will run the entire pipeline (sentence splitting, tokeniza
 
 # Visualizing trees
 
-Parser output trees can by visualized by using the following command and opening the resulting .html file in a modern web browser. By default, the first 50 trees are included; use the `--max_sent` parameter to adjust the number of trees shown.
+Parser output trees can be visualized by using the following command and opening the resulting .html file in a modern web browser. By default, the first 50 trees are included; use the `--max_sent` parameter to adjust the number of trees shown.
 
     cat output.conll09 | python visualize.py > output.html
     
