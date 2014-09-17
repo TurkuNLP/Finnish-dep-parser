@@ -34,13 +34,29 @@ def read_conll(inp,maxsent):
 header=u'<div class="conllu-parse">\n'
 footer=u'</div>\n'
 
+def sort_feat(f):
+    #CoNLL-U requirement -> turn off when no longer required by the visualizer
+    if f==u"_":
+        return f
+    new_list=[]
+    for attr_val in f.split(u"|"):
+        attr,val=attr_val.split(u"_",1)
+        attr=attr.capitalize()
+        val=val.capitalize()
+        val=val.replace(u"_",u"")
+        new_list.append(attr+u"="+val)
+    return u"|".join(sorted(new_list))
+        
+
 def visualize(args):
 
     data_to_print=u""
     for sent in read_conll(args.input,args.max_sent):
         tree=header
         for line in sent:
-            l=u"\t".join(line[i] for i in [0,1,2,4,5,6,8,10]) # take idx,token,lemma,pos,feat,deprel,head
+            line[6]=sort_feat(line[6])
+            l=u"\t".join(line[i] for i in [0,1,2,4,5,6,8,10]) # take idx,token,lemma,pos,pos,feat,deprel,head
+            l+=u"\t_\t_" #DEPS & MISC for CoNLL-U
             tree+=l+u"\n"
         tree+=footer
         data_to_print+=tree
