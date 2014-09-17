@@ -31,7 +31,7 @@ def read_conll(inp,maxsent):
     if isinstance(inp,basestring):
         f.close() #Close it if you opened it
 
-header=u'<div class="conllx-parse">\n'
+header=u'<div class="conllu-parse">\n'
 footer=u'</div>\n'
 
 def visualize(args):
