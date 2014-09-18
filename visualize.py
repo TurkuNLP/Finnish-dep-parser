@@ -72,6 +72,7 @@ def visualize(args):
                 l=u"\t".join(line[i] for i in [0,1,2,4,5,6,8,10]) # take idx,token,lemma,pos,pos,feat,deprel,head
                 l+=u"\t_\t_" #DEPS & MISC for CoNLL-U
             tree+=l+u"\n"
+        tree+=u"\n" #conll-u expects an empty line at the end of every tree
         tree+=footer
         data_to_print+=tree
     with codecs.open(os.path.join(SCRIPTDIR,u"templates","simple_brat_viz.html"),u"r",u"utf-8") as template:
