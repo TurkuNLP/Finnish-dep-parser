@@ -50,10 +50,6 @@ OmorTransducer=omorfi_wrapper.OmorfiWrapper(os.path.join(SCRIPTDIR,"model/morpho
 
 import resolve_readings
 
-try:
-    import readline #if available, use raw_input with readline
-except:
-    pass
 
 # try:
 #     import hfst_lookup
@@ -424,13 +420,17 @@ def hun_tag2omorfi(token,tagString):
 if __name__=="__main__":
     from optparse import OptionParser
     parser = OptionParser(usage="python omorfi_pos.py [options]")
-    parser.add_option("-n", "--no-interactive", dest="interactive", action="store_false", default=True, help="Don't use the interactive prompt, read the data from stdin")
+    parser.add_option("-i", "--interactive", dest="interactive", action="store_true", default=False, help="Use the interactive prompt rather than reading the data from stdin")
     parser.add_option("-o", "--orig", dest="orig", action="store_true", default=False, help="Return tags as originally defined in Omorfi.")
     (options, args) = parser.parse_args()
     
     
 
     if options.interactive:
+        try:
+            import readline #if available, use raw_input with readline
+        except:
+            pass
         while True:
             try:
                 s = raw_input('token> ')
