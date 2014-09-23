@@ -53,3 +53,19 @@ The `data` directory contains two files: `wiki-test.txt` is a small piece of tex
     cat data/tdt_test_set.conll09 | ./tag.sh | ./parse.sh > tdt_test_set_parsed.conll09
     
 To check that everything went fine, you can upload `tdt_test_set_parsed.conll09` to [the TDT treebank test service](http://bionlp-www.utu.fi/tdteval/) and check that the LAS is just above 81%.
+
+# Other features
+
+### Splitting sentences into clauses
+
+    cat output.conll09 | python split_clauses.py > output_clauses.conll09
+    
+This script uses the two last columns in the CONLL-09 format to mark the clause boundaries.
+
+### Visualizing clauses
+
+Separate clauses can be visualized by using the following command and opening the resulting .html file in a modern web browser. By default, the first 50 trees are included; use the `--max_sent` parameter to adjust the number of trees shown.
+
+    cat output_clauses.conll09 | python visualize_clauses.py > output_clauses.html
+    
+
