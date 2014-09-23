@@ -53,25 +53,26 @@ def orig_dtype(tree,node):
 def DFS(tree,node,idx,indexes,hier):
     dtype=tree.dtypes[node]
     new_idx=idx
-    if dtype in types: # this is a new clause
+    if dtype in types: # this is a new clause, use idx + '.' + next number
         if (dtype!=u"ccomp") or (u"CASE_Gen" not in tree.morpho[node]) or (u"PCP_PrsPrc" not in tree.morpho[node]): # remove ccomp when it is not subclause
             suffix=max(hier.get(idx)) if idx in hier else 0
             new_idx=idx+u"."+unicode(suffix+1)
             hier[idx].add(suffix+1)
-    elif dtype==u"conj": # coordination of two subclauses or coordination from sentence root
+    elif dtype==u"conj": # coordination of two subclauses or coordination from sentence root, split from last '.' and add next number
         t,m=orig_dtype(tree,node) 
         if t in types or t==u"ROOT":
             if (t!=u"ccomp") or (u"CASE_Gen" not in m) or (u"PCP_PrsPrc" not in m):
-                suffix=int(idx[-1])
-                new_idx=idx[:-1]+unicode(suffix+1)
-                hier[idx].add(suffix+1)
+                id,suffix=idx.rsplit(u".",1)
+                suffix=max(hier.get(id)) if id in hier else 1
+                new_idx=id+u"."+unicode(suffix+1)
+                hier[id].add(suffix+1)
     indexes[node]=new_idx
     for dep in sorted(tree.deps[node]):
         DFS(tree,dep,new_idx,indexes,hier)
     
 def split(args):
+    count=1
     for sent in read_conll(args.input):
-        
         tree=Tree()
         for token in sent:
             head=int(token[8])
@@ -82,12 +83,13 @@ def split(args):
         # now dictionary is ready, start search from root
         indexes={}
         hier=defaultdict(lambda:set()) # wipe the set
-        DFS(tree,0,u"1",indexes,hier)
+        DFS(tree,0,unicode(count)+u".1",indexes,hier)
         for token in sent:
             token[12]=unicode(indexes[int(token[0])])
             token[13]=unicode(indexes[int(token[0])])
             print (u"\t".join(c for c in token)).encode(u"utf-8")
         print
+        count+=1
         
 
 
