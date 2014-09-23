@@ -56,13 +56,13 @@ To check that everything went fine, you can upload `tdt_test_set_parsed.conll09`
 
 # Other features
 
-### Splitting sentences into clauses
+## Splitting sentences into clauses
 
     cat output.conll09 | python split_clauses.py > output_clauses.conll09
     
 This script uses the two last columns in the CONLL-09 format to mark the clause boundaries.
 
-### Visualizing clauses
+## Visualizing clauses
 
 Separate clauses can be visualized by using the following command and opening the resulting .html file in a modern web browser. By default, the first 50 trees are included; use the `--max_sent` parameter to adjust the number of trees shown.
 
