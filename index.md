@@ -41,7 +41,7 @@ The following command will run the entire pipeline (sentence splitting, tokeniza
 
 # Visualizing trees
 
-Parser output trees can be visualized by using the following command and opening the resulting .html file in a modern web browser. By default, the first 50 trees are included; use the `--max_sent` parameter to adjust the number of trees shown.
+Parser output trees can be visualized by using the following command and opening the resulting .html file in a modern web browser. Use the `--max_sent` parameter to limit the number of trees shown.
 
     cat output.conll09 | python visualize.py > output.html
     
@@ -64,7 +64,7 @@ This script uses the two last columns in the CONLL-09 format to mark the clause 
 
 ## Visualizing clauses
 
-Separate clauses can be visualized by using the following command and opening the resulting .html file in a modern web browser. By default, the first 50 trees are included; use the `--max_sent` parameter to adjust the number of trees shown.
+Separate clauses can be visualized by using the following command and opening the resulting .html file in a modern web browser. Use the `--max_sent` parameter to limit the number of trees shown.
 
     cat output_clauses.conll09 | python visualize_clauses.py > output_clauses.html
     
