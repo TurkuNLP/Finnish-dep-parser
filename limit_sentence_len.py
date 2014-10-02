@@ -11,7 +11,7 @@ FORM=1
 def cutCandidates(sent):
     #Cut-point candidates for sent (list of CoNLL09 columns)
     candidates=[] #list of: (score, position of cut (new sent starts here))
-    for lIdx in range(5,len(sent)-5): #Don't want to cut too short
+    for lIdx in range(args.leeway,len(sent)-args.leeway): #Don't want to cut too short
         l=sent[lIdx]
         if l[FORM]==u";": #semicolon is a decent candidate
             candidates.append((0,lIdx+1))
@@ -41,14 +41,19 @@ def cutSent(sent):
     cutPoints=cutPointsNearPlaces(nearPlaces,candidates)
     if len(sent)-cutPoints[-1]<args.leeway:
         cutPoints.pop(-1) #We don't want to have too short final segment
+
     subsents=[]
     prev=0
     for x in cutPoints+[len(sent)]:
+        #create a new sub-sentence
         subsents.append(sent[prev:x])
+        
+        #...renumber tokens
         newSubSent=subsents[-1]
         for idx in range(len(newSubSent)):
             newSubSent[idx][ID]=unicode(idx+1)
         prev=x
+
     return subsents
 
 def print_sent(sent,comments):
@@ -56,9 +61,13 @@ def print_sent(sent,comments):
     print >> out8, u"\n".join(u"\t".join(cols) for cols in sent)
     print >> out8
 
-def cutSentence(sent,comments):
+def cutAndPrintSentence(sent,comments):
     subsents=cutSent(sent)
+
+    #The first sub-sentence will take on the comment of the whole sentence
     print_sent(subsents[0],comments)
+
+    #and every other will have a comment marking it as a continuation of the prev. one
     for x in subsents[1:]:
         assert len(x)>0
         print_sent(x,[u"#---sentence---splitter---JOIN-TO-PREVIOUS-SENTENCE---"])
@@ -75,7 +84,7 @@ if __name__=="__main__":
         if len(sent)<=args.max_len: #this one's good
             pass#print_sent(sent,comments)
         else:
-            cutSentence(sent,comments)
+            cutAndPrintSentence(sent,comments)
 
         
         
