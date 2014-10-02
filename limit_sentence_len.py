@@ -37,6 +37,7 @@ def cutPointsNearPlaces(nearPlaces,cutCandidates):
 
 def cutSent(sent):
     nearPlaces=list(range(args.chunk_size,len(sent),args.chunk_size)) #The places nearby which a cut should ideally happen
+    assert len(nearPlaces)>0, len(sent)
     candidates=cutCandidates(sent)
     cutPoints=cutPointsNearPlaces(nearPlaces,candidates)
     if len(sent)-cutPoints[-1]<args.leeway:
@@ -56,10 +57,12 @@ def cutSent(sent):
 
     return subsents
 
-def print_sent(sent,comments):
-    print >> out8, u"\n".join(comments)
+def print_sent(sent,comments,add_newline=True):
+    if comments:
+        print >> out8, u"\n".join(comments)
     print >> out8, u"\n".join(u"\t".join(cols) for cols in sent)
-    print >> out8
+    if add_newline:
+        print >> out8
 
 def cutAndPrintSentence(sent,comments):
     subsents=cutSent(sent)
@@ -73,18 +76,35 @@ def cutAndPrintSentence(sent,comments):
         print_sent(x,[u"#---sentence---splitter---JOIN-TO-PREVIOUS-SENTENCE---"])
 
 if __name__=="__main__":
-    parser = argparse.ArgumentParser(description='Split/merge long sentences')
-    parser.add_argument('-N', '--max-len', type=int, default=120, help='Pass sentences shorter or equal to this number of tokens through, split the rest. This will also be the absolute maximum chunk size ever fed into the parser.')
-    parser.add_argument('-C', '--chunk-size', type=int, default=80, help='Split into chunks of approximately this size.')
+    parser = argparse.ArgumentParser(description='Split/merge long sentences. Use --reverse to merge.')
+    parser.add_argument('--reverse', default=False, action="store_true", help='Reverse the splitting.')
+    parser.add_argument('-N', '--max-len', type=int, default=120, help='Pass sentences shorter or equal to this number of tokens through, split the rest. This will also be the absolute maximum chunk size ever fed into the parser. Default %(default)d.')
+    parser.add_argument('-C', '--chunk-size', type=int, default=80, help='Split into chunks of approximately this size. Default %(default)d.')
     parser.add_argument('input', nargs='?', help='Input. Nothing or "-" for stdin.')
     args = parser.parse_args()
-    args.leeway=args.chunk_size//3 #TODO
-    
-    for sent,comments in read_conll(args.input,0):
-        if len(sent)<=args.max_len: #this one's good
-            pass#print_sent(sent,comments)
+    args.leeway=args.chunk_size//3 #TODO - better value maybe?
+
+    lastlen=None
+    if args.reverse:
+        for sent,comments in read_conll(args.input,0):
+            if len(comments)==1 and comments[-1]==u"#---sentence---splitter---JOIN-TO-PREVIOUS-SENTENCE---":
+                renumber(sent,lastlen)
+                print_sent(sent,[],False)
+                lastlen+=len(sent)
+            else:
+                if lastlen is not None:
+                    print >> out8
+                print_sent(sent,comments,False)
+                last_len=len(sent)
         else:
-            cutAndPrintSentence(sent,comments)
+            print >> out8
+                
+    else:
+        for sent,comments in read_conll(args.input,0):
+            if len(sent)<=args.max_len: #this one's good
+                print_sent(sent,comments)
+            else:
+                cutAndPrintSentence(sent,comments)
 
         
         
