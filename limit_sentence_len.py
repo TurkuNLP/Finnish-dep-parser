@@ -64,6 +64,8 @@ def print_sent(sent,comments,add_newline=True):
     if add_newline:
         print >> out8
 
+def renumber
+
 def cutAndPrintSentence(sent,comments):
     subsents=cutSent(sent)
 
