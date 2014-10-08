@@ -2,7 +2,10 @@ from visualize import read_conll
 import codecs
 import json
 import os.path
-import argparse
+try:
+    import argparse
+except ImportError:
+    import compat.argparse as argparse
 
 def print_sent(sent,comments):
     if comments:

@@ -3,7 +3,10 @@ import codecs
 import os
 import hashlib
 import json
-import argparse
+try:
+    import argparse
+except ImportError:
+    import compat.argparse as argparse
 
 parser = argparse.ArgumentParser(description='Options')
 parser.add_argument('-d', required=True, help='Where to save the comments?')

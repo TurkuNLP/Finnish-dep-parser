@@ -1,7 +1,10 @@
 from visualize import read_conll
 import codecs
 import json
-import argparse
+try:
+    import argparse
+except ImportError:
+    import compat.argparse as argparse
 
 def print_sent(sent):
     print (u"\n".join(u"\t".join(cols) for cols in sent)).encode(u"utf-8")

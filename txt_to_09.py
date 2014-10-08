@@ -1,7 +1,10 @@
 import sys
 import json
 import os.path
-import argparse
+try:
+    import argparse
+except ImportError:
+    import compat.argparse as argparse
 
 
 parser = argparse.ArgumentParser(description='Options')
