@@ -37,7 +37,7 @@ The following command will run the entire pipeline (sentence splitting, tokeniza
 
 # Parsing CoNLL-09 formatted input
     
-    cat input.conll09 | ./tag.sh | ./parse.sh > output.conll09
+    cat input.conll09 | ./parse_conll.sh > output.conll09
 
 # Visualizing trees
 
@@ -50,9 +50,9 @@ Parser output trees can be visualized by using the following command and opening
 The `data` directory contains two files: `wiki-test.txt` is a small piece of text from the Finnish Wikipedia and `tdt_test_set.conll09` is the (blank) official test set of the TDT treebank. You can parse these files as follows:
 
     cat data/wiki-test.txt | ./parser_wrapper.sh > wiki-test-parsed.txt
-    cat data/tdt_test_set.conll09 | ./tag.sh | ./parse.sh > tdt_test_set_parsed.conll09
+    cat data/tdt_test_set.conll09 | ./parse_conll.sh > tdt_test_set_parsed.conll09
     
-To check that everything went fine, you can upload `tdt_test_set_parsed.conll09` to [the TDT treebank test service](http://bionlp-www.utu.fi/tdteval/) and check that the LAS is just above 81%.
+To check that everything went fine, you can upload `tdt_test_set_parsed.conll09` to [the TDT treebank test service](http://bionlp-www.utu.fi/tdteval/) and check that the LAS is around 81%.
 
 # Other features
 
@@ -68,4 +68,8 @@ Separate clauses can be visualized by using the following command and opening th
 
     cat output_clauses.conll09 | python visualize_clauses.py > output_clauses.html
     
+## Passing comments through sentence splitting and tokenization
 
+    cat sometext.txt | ./split_text_with_comments.sh | ./parse_conll.sh > output.conll09
+    
+You can include comments also in plain text. All lines starting with `###C:` are interpreted as comments and are passed through as such.
