@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# 
+export MAX_SEN_LEN=100  #sentences longer than this will be chopped and parsed chunked
+export SEN_CHUNK=33 #length of the chunk into which the sentences will be chopped (the actual chunk size will differ a bit, depending where a suitable place can be found to cut the chunks)
+
 #Inits the parsing pipeline (exports variable names, modifies path, makes TMPDIR)
 
 export PYTHON=python

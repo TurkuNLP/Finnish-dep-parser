@@ -12,8 +12,8 @@ fi
 
 
 #2) remove comments, tag the input, and fill in lemmas
-
-cat | $PYTHON store_comments.py | ./tag.sh > $TMPDIR/input_tagged.conll09
+# MAX_SEN_LEN and SEN_CHUNK are defined in init.sh
+cat | $PYTHON limit_sentence_len.py -N $MAX_SEN_LEN -C $SEN_CHUNK | $PYTHON store_comments.py | ./tag.sh > $TMPDIR/input_tagged.conll09
 
 if [[ $? -ne 0 ]]
 then
@@ -27,7 +27,7 @@ cat $TMPDIR/input_tagged.conll09 | ./parse.sh  > $TMPDIR/input_parsed.conll09
 
 #4) add comments
 
-cat $TMPDIR/input_parsed.conll09 | $PYTHON add_comments.py
+cat $TMPDIR/input_parsed.conll09 | $PYTHON add_comments.py | $PYTHON limit_sentence_len.py --reverse
 
 #5) delete the temporary directory
 
