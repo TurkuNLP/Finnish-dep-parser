@@ -12,13 +12,13 @@ def cutCandidates(sent):
     candidates=[] #list of: (score, position of cut (new sent starts here))
     for lIdx in range(args.leeway,len(sent)-args.leeway): #Don't want to cut too short
         l=sent[lIdx]
-        if l[FORM]==u";": #semicolon is a decent candidate
+        if l[FORM] in (u";",): #semicolon is a pretty decent candidate
             candidates.append((0,lIdx+1))
         elif l[FORM]==u")" and sent[lIdx-1][FORM].isdigit() and sent[lIdx-2][FORM]==u",": #lists like ", 2 ) ..."
             candidates.append((5, lIdx-1))
-        elif l[FORM] in (u":",): #colon a worse candidate
+        elif l[FORM] in u":\u2012\u2013\u2014\u2015\u2053~----": #colon and dashes are a worse candidate still. The \u chars are different dashes
             candidates.append((10, lIdx+1))
-        elif l[FORM] in (u",",): #comma the worst candidate
+        elif l[FORM] in (u",",): #and comma is the worst candidate
             candidates.append((20, lIdx+1))
 
     return candidates
