@@ -1,12 +1,16 @@
 import sys
 import json
 import os.path
+import argparse
 
-SCRIPTDIR=os.path.dirname(os.path.abspath(__file__))
+
+parser = argparse.ArgumentParser(description='Options')
+parser.add_argument('-d', help='Where to read the comments?')
+args = parser.parse_args()
 
 hashes=None
-if os.path.isfile(os.path.join(SCRIPTDIR,u"tmp_data","comment_hashes.json")):
-    with open(os.path.join(SCRIPTDIR,u"tmp_data","comment_hashes.json"),"r") as f:
+if args.d and os.path.isfile(args.d):
+    with open(args.d,"r") as f:
         hashes=json.load(f)
 
 for lineIdx,line in enumerate(sys.stdin):

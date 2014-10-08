@@ -3,8 +3,11 @@ import codecs
 import os
 import hashlib
 import json
+import argparse
 
-SCRIPTDIR=os.path.dirname(os.path.abspath(__file__))
+parser = argparse.ArgumentParser(description='Options')
+parser.add_argument('-d', required=True, help='Where to save the comments?')
+args = parser.parse_args()
 
 hashes=dict()
 inp=codecs.getreader("utf-8-sig")(os.fdopen(0,"U"))
@@ -16,5 +19,5 @@ for line in inp:
         print hashed_line
     else:
         print line.encode(u"utf-8")
-with open(os.path.join(SCRIPTDIR,u"tmp_data","comment_hashes.json"),"w") as f:
+with open(args.d,"w") as f:
     json.dump(hashes,f)

@@ -1,12 +1,14 @@
 from visualize import read_conll
 import codecs
 import json
-import os.path
+import argparse
 
 def print_sent(sent):
     print (u"\n".join(u"\t".join(cols) for cols in sent)).encode(u"utf-8")
 
-SCRIPTDIR=os.path.dirname(os.path.abspath(__file__))
+parser = argparse.ArgumentParser(description='Options')
+parser.add_argument('-d', required=True, help='Where to save the comments?')
+args = parser.parse_args()
 
 comms=dict()
 sent_count=0
@@ -19,5 +21,5 @@ for sent,comments in read_conll(None,0):
     print_sent(sent)
     
     
-with codecs.open(os.path.join(SCRIPTDIR,u"tmp_data",u"comments_parser.json"),u"w") as f:
+with codecs.open(args.d,u"w") as f:
     json.dump(comms,f)
