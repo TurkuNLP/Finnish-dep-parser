@@ -1,7 +1,11 @@
-import argparse
 from visualize import read_conll
 import sys
 import codecs
+
+try:
+    import argparse
+except ImportError:
+    import compat.argparse as argparse
 
 out8=codecs.getwriter("utf-8")(sys.stdout)
 

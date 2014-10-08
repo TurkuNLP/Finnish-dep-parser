@@ -1,10 +1,14 @@
-import argparse
 import codecs
 import sys
 import os
 from collections import defaultdict
 
 from visualize import read_conll,sort_feat,header,footer
+
+try:
+    import argparse
+except ImportError:
+    import compat.argparse as argparse
 
 SCRIPTDIR=os.path.dirname(os.path.abspath(__file__))
 
