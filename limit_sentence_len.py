@@ -78,13 +78,13 @@ def get_root(sent):
     """
     On the off-chance there'd be several roots, let's dep them together and return the first one
     """
-    r=[]
+    r=[] #list of 0-based indices into sent pointing to root rows
     for idx,cols in enumerate(sent):
         if cols[HEAD]==u"0":
             r.append(idx)
     if len(r)>1: #Ooops - this really happens?
         for i in range(1,len(r)):
-            gov,d_row=r[i-1][ID],r[i] #gov is the string with ID
+            gov,d_row=sent[r[i-1]][ID],sent[r[i]] #gov is the string with ID
             d_row[HEAD]=gov
             d_row[PHEAD]=gov
             d_row[DEPREL]=u"dep"
