@@ -16,8 +16,8 @@ if __name__=="__main__":
     parser = OptionParser()
     parser.add_option("-t", "--train", dest="train",action="store_true",default=False, help="Prepare training data")
     parser.add_option("--tempdir", dest="tempdir",action="store",default=".", help="Where temporary files should be kept. Default to current dir.")
-    parser.add_option("-p", "--predict", dest="predict",action="store", default=None,help="Fill PLEMMA/PPOS/PFEAT using the hunpos model",metavar="HUNPOSMODEL")
-    parser.add_option("--hunpos", dest="hunposbin",action="store", default=None,help="hunpos-train binary")
+    parser.add_option("-m", "--model", dest="model",action="store", default=None,help="Fill PLEMMA/PPOS/PFEAT using this marmot model",metavar="MODELFILE")
+    parser.add_option("--marmot", dest="marmotbin",action="store", default=None,help="marmot .jar file")
     (options, args) = parser.parse_args()
 
     if options.train:
@@ -28,20 +28,24 @@ if __name__=="__main__":
                 continue
             cols=line.split(u"\t")
             assert len(cols) in (13,14,15)
-            token,pos,feat=cols[1],cols[4],cols[6]
+            idx,token,pos,feat=int(cols[0]),cols[1],cols[4],cols[6]
             tagList=[None for x in range(17)]
-            tagList[0]=pos
+            #tagList[0]=pos
             if feat!=u"_":
                 for cat_tag in feat.split(u"|"):
                     cat,tag=cat_tag.split(u"_",1)
                     tagList[omor.cat2idx[cat]]=tag
-            print (token+u"\t"+omor.hun_taglist2tagstring(tagList)).encode("utf-8")
-        print >> sys.stderr, "Now you may want to train hunpos for example as"
-        print >> sys.stderr, "cat train.hunpos | LIBS/hunpos-1.0-linux/hunpos-train -f 4 model/hunpos.model"
-    elif options.predict!=None:
-        wForms=set() #morphtab file entries
-        f=codecs.open(os.path.join(options.tempdir,"hunpos_in"),"wt","utf-8")
-        fM=codecs.open(os.path.join(options.tempdir,"hunpos_in_mtable"),"wt","utf-8")
+            s=omor.hun_taglist2tagstring(tagList)
+            pos_set=set(omor.hun_possiblepos(token))
+            #pos_set.add(pos)
+            marmot_feats=u"#".join(u"POS_"+x for x in sorted(pos_set))
+            if not marmot_feats:
+                marmot_feats=u"_"
+            if not s:
+                s=u"_"
+            print (unicode(idx-1)+u"\t"+token+u"\t"+pos+u"\t"+s+u"\t"+marmot_feats).encode("utf-8")
+    elif options.model!=None:
+        f=codecs.open(os.path.join(options.tempdir,"marmot_in"),"wt","utf-8")
         lines=[]
         for line in sys.stdin:
             line=unicode(line,"utf-8").strip()
@@ -52,10 +56,12 @@ if __name__=="__main__":
                 continue
             else:
                 assert len(cols) in (13,14,15)
-                print >> f, cols[1] #wordform
+                pos_set=set(omor.hun_possiblepos(cols[1]))
+                marmot_feats=u"#".join(u"POS_"+x for x in sorted(pos_set))
+                if not marmot_feats:
+                    marmot_feats=u"_"
+                print >> f, cols[1]+u"\t"+marmot_feats #wordform tab feats
             wForm=cols[1]
-            if wForm in wForms:
-                continue #Given already
             try:
                 tags=u"\t".join(omor.hun_possibletags(wForm))
             except:
@@ -63,25 +69,18 @@ if __name__=="__main__":
             if not tags:
                 continue
             wForms.add(wForm)
-            print >> fM, wForm+u"\t"+tags
+            #print >> fM, wForm+u"\t"+tags
         f.close()
-        fM.close()
-        #Now invoke hunpos
+        #Now invoke marmot
         try:
-            fIN=open(os.path.join(options.tempdir,"hunpos_in"),"r")
-            fOUT=open(os.path.join(options.tempdir,"hunpos_out"),"w")
-            fERR=open(os.path.join(options.tempdir,"hunpos_errout"),"w")
-            args=[options.hunposbin,options.predict,"-m",os.path.join(options.tempdir,"hunpos_in_mtable")]
-            p=subprocess.call(args,stdin=fIN,stdout=fOUT,stderr=fERR)
-            fIN.close()
-            fOUT.flush()
-            fOUT.close()
-            fERR.flush()
-            fERR.close()
+            name_in=os.path.join(options.tempdir,"marmot_in")
+            name_out=os.path.join(options.tempdir,"marmot_out")
+            args=["java","-cp",options.marmotbin,"marmot.morph.cmd.Annotator","--model-file",options.model,"--pred-file",name_out,"--test-file","form-index=0,token-feature-index=1,"+name_in]
+            p=subprocess.call(args)
 
-            f=codecs.open(os.path.join(options.tempdir,"hunpos_out"),"rt","utf-8")
+            f=codecs.open(name_out,"r","utf-8")
             predictions=[]
-            for line in f: #reads in HunPos predictions
+            for line in f: #reads in MarMot predictions
                 line=line.strip()
                 predictions.append(line.split(u"\t"))
             f.close()
@@ -109,7 +108,7 @@ if __name__=="__main__":
                 print
                 newSent=True
                 continue #New sentence starts
-            assert inCols[1]==pred[0] #Tokens must match
+            assert inCols[1]==pred[1] #Tokens must match
             txt=inCols[1]
             if omor.is_punct(txt):
                 plemma,ppos,pfeat=txt,u"Punct",u"_"

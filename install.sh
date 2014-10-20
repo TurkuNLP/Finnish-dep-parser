@@ -107,11 +107,14 @@ runc wget http://sourceforge.net/projects/hfst/files/optimized-lookup/hfst-ol.ja
 echoc "Downloading the parser binary from http://mate-tools.googlecode.com/files/anna-3-1.jar"
 runc wget http://mate-tools.googlecode.com/files/anna-3-1.jar
 
+echoc "Downloading the Marmot tagger"
+runc wget http://www.cis.lmu.de/~muellets/marmot/CURRENT/marmot-2014-09-11.jar
+
 echoc "Downloading Apache OpenNLP (sentence splitter and tokenizer)"
 runc wget http://mirror.netinch.com/pub/apache/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
 runc tar zxf apache-opennlp-1.5.3-bin.tar.gz
 
-runc select_hunpos_binary  #This checks which hunpos works (the downloaded binary, or the binary included here) and makes a symlink to LIBS/hunpos-tag
+#runc select_hunpos_binary  #This checks which hunpos works (the downloaded binary, or the binary included here) and makes a symlink to LIBS/hunpos-tag
 runc select_hfstol
 
 runc cd ..

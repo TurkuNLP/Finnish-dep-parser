@@ -381,6 +381,17 @@ def fill_ortho(token,tagList):
     else:
         tagList[cat2idx["CASECHANGE"]]=None
 
+def hun_possiblepos(token):
+    res=set()
+    for r in omorfi_lookup(token):
+        try:
+            lemma,taglist=analyze_reading(r)
+            fullTagList=analyze_taglist(taglist)
+            res.add(fullTagList[0]) #pick the POS
+        except:
+            print >> sys.stderr, "Skipping token:", token.encode("utf-8")
+    return list(res)
+
 def hun_possibletags(token):
     res=set()
     for r in omorfi_lookup(token):
