@@ -61,15 +61,6 @@ if __name__=="__main__":
                 if not marmot_feats:
                     marmot_feats=u"_"
                 print >> f, cols[1]+u"\t"+marmot_feats #wordform tab feats
-            wForm=cols[1]
-            try:
-                tags=u"\t".join(omor.hun_possibletags(wForm))
-            except:
-                tags=u""
-            if not tags:
-                continue
-            wForms.add(wForm)
-            #print >> fM, wForm+u"\t"+tags
         f.close()
         #Now invoke marmot
         try:
@@ -86,10 +77,10 @@ if __name__=="__main__":
             f.close()
 
             if len(predictions)==0:
-                raise ValueError("Empty predictions from hunpos in %s"%(os.path.join(options.tempdir,"hunpos_out")))
+                raise ValueError("Empty predictions from hunpos in %s"%(os.path.join(options.tempdir,"marmot_out")))
         except:
             traceback.print_exc()
-            log.error("""Did not succeed in launching 'LIBS/%s'. The most common reason for this is that you forgot to run './install.sh'. \n\nIf you get this message even though you did succeed with ./install.sh, it means that the local installation of hunpos is not operating correctly. Try to run the above command, feed into it "koira koira koira koira", one word per line, then one more empty line, and you should get a tagged output. See if there's any obvious problem. Then either open an issue at https://github.com/TurkuNLP/Finnish-dep-parser/issues  or email ginter@cs.utu.fi and jmnybl@utu.fi and we'll try to help you.\n\nGiving up, because the parser cannot run without a tagger."""%(" ".join(args)))
+            log.error("""Did not succeed in launching 'LIBS/%s'. The most common reason for this is that you forgot to run './install.sh'. \n\nGiving up, because the parser cannot run without a tagger."""%(" ".join(args)))
             sys.exit(1)
 
         
@@ -115,7 +106,10 @@ if __name__=="__main__":
             elif omor.is_num(txt):
                 plemma,ppos,pfeat=txt,u"Num",u"_"
             else:
-                plemma,ptaglist=omor.hun_tag2omorfi(pred[0],pred[1]) #Find the most plausible reading
+                tl=u"POS_"+pred[5]
+                if pred[7]!=u"_":
+                    tl+=u"|"+pred[7]
+                plemma,ptaglist=omor.hun_tag2omorfi(pred[1],tl) #Find the most plausible reading
                 omor.fill_ortho(txt,ptaglist)
                 if txt==u"*null*":
                     ptaglist[omor.cat2idx[u"OTHER"]]=None
