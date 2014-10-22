@@ -5,7 +5,7 @@
 
 source init.sh
 
-$PYTHON marmot-tag.py --marmot $THIS/LIBS/marmot-2014-09-11.jar --tempdir $TMPDIR -m model/fin_model.marmot > $TMPDIR/input_tagged_1.conll09
+$PYTHON marmot-tag.py --marmot $THIS/LIBS/marmot.jar --tempdir $TMPDIR -m model/fin_model.marmot > $TMPDIR/input_tagged_1.conll09
 
 if [[ $? -ne 0 ]]
 then

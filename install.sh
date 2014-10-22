@@ -77,7 +77,7 @@ echoc "Downloading the parser binary from http://mate-tools.googlecode.com/files
 runc wget http://mate-tools.googlecode.com/files/anna-3-1.jar
 
 echoc "Downloading the Marmot tagger"
-runc wget http://www.cis.lmu.de/~muellets/marmot/14-09-11/marmot-2014-09-11.jar
+runc wget -O marmot.jar http://www.cis.lmu.de/~muellets/marmot/14-10-22/marmot-2014-10-22.jar
 
 echoc "Downloading Apache OpenNLP (sentence splitter and tokenizer)"
 runc wget http://mirror.netinch.com/pub/apache/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
