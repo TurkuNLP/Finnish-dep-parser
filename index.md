@@ -20,14 +20,10 @@ On most systems, all you need is to run the `install.sh` script, which will down
 
 * [OpenNLP](http://opennlp.apache.org) for sentence splitting and tokenization
 * [OMorFi](http://code.google.com/p/omorfi/) and [HFST optimized lookup](http://sourceforge.net/projects/hfst/files/optimized-lookup/) for morphological analysis
-* [HunPOS](http://code.google.com/p/hunpos/) for morphological disambiguation (tagging)
+* [MarMoT](https://code.google.com/p/cistern/wiki/marmot) for morphological disambiguation (tagging)
 * [mate-tools](https://code.google.com/p/mate-tools/) for dependency parsing
 
-Of these, all but HunPOS are Java programs and tend to work fine anywhere. 
-
-## If HunPOS doesn't run
-
-HunPOS is a binary distribution and works OK on some systems and not so much on others. If the install script cannot make it work, try to compile it yourself (it's typically very easy) and copy `hunpos-tag` into the LIBS directory. Everything should work fine after that.
+These all are Java programs and tend to work fine anywhere with a sane Java installation.
 
 # Parsing plain text
 
