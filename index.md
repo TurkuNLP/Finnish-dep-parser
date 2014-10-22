@@ -31,7 +31,7 @@ The following command will run the entire pipeline (sentence splitting, tokeniza
 
     cat sometext.txt | ./parser_wrapper.sh > output.conll09
 
-## Parsing plain text with possible comments
+# Parsing plain text with possible comments
 
 If you need to preserve metadata in the input, you can include
 comments (lines starting with `###C:`) into the input. These lines
@@ -44,11 +44,11 @@ output.
   
     cat input.conll09 | ./parse_conll.sh > output.conll09
 
-Note that comments (lines starting with `#`) in the conll09 file will
-be preserved and passed through the pipeline unchanged. Make sure the
-comments immediately precede the following sentence, i.e. there should
-not be an empty line between the comments and the first token of the
-sentence.
+Note that comments (lines in the CoNLL-09 file that start with `#`)
+will be preserved and passed through the pipeline unchanged. Make sure
+the comments immediately precede the next sentence, i.e. there
+should not be an empty line between the comments and the first token
+of the sentence.
 
 # Visualizing trees
 
@@ -63,7 +63,7 @@ The `data` directory contains two files: `wiki-test.txt` is a small piece of tex
     cat data/wiki-test.txt | ./parser_wrapper.sh > wiki-test-parsed.txt
     cat data/tdt_test_set.conll09 | ./parse_conll.sh > tdt_test_set_parsed.conll09
     
-To check that everything went fine, you can upload `tdt_test_set_parsed.conll09` to [the TDT treebank test service](http://bionlp-www.utu.fi/tdteval/) and check that the LAS is around 81%.
+To check that everything went fine, you can upload `tdt_test_set_parsed.conll09` to [the TDT treebank test service](http://bionlp-www.utu.fi/tdteval/) and check that the LAS is around 81.6%.
 
 # Other features
 
