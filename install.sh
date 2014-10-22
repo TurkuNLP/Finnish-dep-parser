@@ -22,37 +22,6 @@ function checkc {
     echo
 }
 
-function select_hunpos_binary {
-    echo "Selecting the HunPOS binary to run:"
-    #Do we already have a working hunpos-tag in LIBS?
-    echo "koira" | ./hunpos-tag ../model/hunpos.model > /dev/null 2>&1
-    if (( $? == 0 ))
-    then
-	echo "...seems to have been done already, works."
-	return 0
-    fi
-
-    #Try the distributed binaries until you find one which works
-    for huntag in ../LIBS-LOCAL/hunpos/hunpos-tag-*
-    do
-	echo "Trying $huntag"
-	echo "koira" | $huntag ../model/hunpos.model > /dev/null 2>&1
-	if (( $? == 0 ))
-	then
-	#it works! symlink it
-	    echo "Works. Selecting it"
-	    ln -f -s $huntag ./hunpos-tag
-	    return 0
-	fi
-    done
-    echo
-    echo "Couldn't get any of the HunPOS binaries in LIBS-LOCAL/hunpos to work"
-    echo
-    echo "Try to compile it yourself by following the commands in LIBS-LOCAL/hunpos/compile-hunpos.sh"
-    echo "If you can make the program hunpos-tag to run, copy or symlink it as LIBS/hunpos-tag and"
-    echo "kindly contribute the compiled binary to the project: ginter@cs.utu.fi   Thank you!"
-    return 1
-}
 
 function select_hfstol {
     echo "Selecting the hfst-ol.jar to run:"
@@ -121,6 +90,3 @@ runc cd ..
 echo
 echo "Now try"
 echo "cat data/wiki-test.txt | ./parser_wrapper.sh > wiki-test-parsed.txt"
-
-
-

@@ -77,7 +77,7 @@ if __name__=="__main__":
             f.close()
 
             if len(predictions)==0:
-                raise ValueError("Empty predictions from hunpos in %s"%(os.path.join(options.tempdir,"marmot_out")))
+                raise ValueError("Empty predictions from Marmot in %s"%(os.path.join(options.tempdir,"marmot_out")))
         except:
             traceback.print_exc()
             log.error("""Did not succeed in launching 'LIBS/%s'. The most common reason for this is that you forgot to run './install.sh'. \n\nGiving up, because the parser cannot run without a tagger."""%(" ".join(args)))
