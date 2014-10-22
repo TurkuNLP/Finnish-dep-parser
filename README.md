@@ -52,4 +52,4 @@ The `data` directory contains two files: `wiki-test.txt` is a small piece of tex
 To check that everything went fine, you can upload `tdt_test_set_parsed.conll09` to [the TDT treebank test service](http://bionlp-www.utu.fi/tdteval/) and check that the LAS is just above 81%.
     
 
-    
+ 
