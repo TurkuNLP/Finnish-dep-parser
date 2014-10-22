@@ -31,9 +31,24 @@ The following command will run the entire pipeline (sentence splitting, tokeniza
 
     cat sometext.txt | ./parser_wrapper.sh > output.conll09
 
+## Parsing plain text with possible comments
+
+If you need to preserve metadata in the input, you can include
+comments (lines starting with `###C:`) into the input. These lines
+will be passes through the pipeline unchanged and preserved in the
+output.
+
+    cat sometext.txt | ./split_text_with_comments.sh | ./parse_conll.sh > output.conll09
+
 # Parsing CoNLL-09 formatted input
-    
+  
     cat input.conll09 | ./parse_conll.sh > output.conll09
+
+Note that comments (lines starting with `#`) in the conll09 file will
+be preserved and passed through the pipeline unchanged. Make sure the
+comments immediately precede the following sentence, i.e. there should
+not be an empty line between the comments and the first token of the
+sentence.
 
 # Visualizing trees
 
@@ -64,8 +79,3 @@ Separate clauses can be visualized by using the following command and opening th
 
     cat output_clauses.conll09 | python visualize_clauses.py > output_clauses.html
     
-## Passing comments through sentence splitting and tokenization
-
-    cat sometext.txt | ./split_text_with_comments.sh | ./parse_conll.sh > output.conll09
-    
-You can include comments also in plain text. All lines starting with `###C:` are interpreted as comments and are passed through as such.
