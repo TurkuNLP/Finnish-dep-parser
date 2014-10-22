@@ -1,8 +1,12 @@
-import argparse
 import codecs
 import sys
 import os
 from collections import defaultdict
+
+try:
+    import argparse
+except ImportError:
+    import compat.argparse as argparse
 
 SCRIPTDIR=os.path.dirname(os.path.abspath(__file__))
 

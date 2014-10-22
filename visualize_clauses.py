@@ -1,10 +1,14 @@
-import argparse
 import codecs
 import sys
 import os
 from collections import defaultdict
 
 from visualize import read_conll,sort_feat,header,footer
+
+try:
+    import argparse
+except ImportError:
+    import compat.argparse as argparse
 
 SCRIPTDIR=os.path.dirname(os.path.abspath(__file__))
 
@@ -80,6 +84,6 @@ if __name__==u"__main__":
     parser = argparse.ArgumentParser(description='Trains the parser in a multi-core setting.')
     g=parser.add_argument_group("Input/Output")
     g.add_argument('input', nargs='?', help='Parser output file name, or nothing for reading on stdin')
-    g.add_argument('--max_sent', type=int, default=50, help='How many trees to show? (default %(default)d)')
+    g.add_argument('--max_sent', type=int, default=0, help='How many trees to show? 0 for all. (default %(default)d)')
     args = parser.parse_args()
     visualize_clauses(args)
