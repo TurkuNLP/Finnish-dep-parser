@@ -51,7 +51,10 @@ def sort_feat(f):
         return f
     new_list=[]
     for attr_val in f.split(u"|"):
-        attr,val=attr_val.split(u"_",1)
+        if '=' in attr_val:
+            attr,val=attr_val.split(u"=",1)
+        else:
+            attr,val=attr_val.split(u"_",1)
         attr=attr.capitalize()
         val=val.capitalize()
         val=val.replace(u"_",u"")
