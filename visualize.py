@@ -1,6 +1,7 @@
 import codecs
 import sys
 import os
+import collections
 
 try:
     import argparse
@@ -51,16 +52,30 @@ def sort_feat(f):
         return f
     new_list=[]
     for attr_val in f.split(u"|"):
-        attr,val=attr_val.split(u"_",1)
+        if u"=" in attr_val:
+            attr,val=attr_val.split(u"=",1)
+        else:
+            attr,val=attr_val.split(u"_",1)
         attr=attr.capitalize()
         val=val.capitalize()
         val=val.replace(u"_",u"")
         new_list.append(attr+u"="+val)
     return u"|".join(sorted(new_list))
+
+Format=collections.namedtuple('Format',['ID','FORM','LEMMA','CPOS','POS','FEAT','HEAD','DEPREL','DEPS','MISC'])
+f_09=Format(0,1,2,4,4,6,8,10,None,None)
+f_u=Format(0,1,2,3,4,5,6,7,8,9)
         
 #         0  1    2     3       4  5    6    7      8    9     10     11
 #conll-u  ID FORM LEMMA CPOS   POS FEAT HEAD DEPREL DEPS MISC
 #conll-09 ID FORM LEMMA PLEMMA POS PPOS FEAT PFEAT  HEAD PHEAD DEPREL PDEPREL _ _
+
+def get_col(cols,idx):
+    if idx is None:
+        return u"_"
+    else:
+        return cols[idx]
+
 def visualize(args):
     data_to_print=u""
     for sent,comments in read_conll(args.input,args.max_sent):
@@ -69,12 +84,11 @@ def visualize(args):
             tree+=u"\n".join(comments)+u"\n"
         for line in sent:
             if len(line)==10: #conll-u
-                line[5]=sort_feat(line[5])
-                l=u"\t".join(line)
-            else: #conll-09
-                line[6]=sort_feat(line[6])
-                l=u"\t".join(line[i] for i in [0,1,2,4,5,6,8,10]) # take idx,token,lemma,pos,pos,feat,deprel,head
-                l+=u"\t_\t_" #DEPS & MISC for CoNLL-U
+                f=f_u
+            else:
+                f=f_09
+            line[f.FEAT]=sort_feat(line[f.FEAT])
+            l=u"\t".join(get_col(line,idx) for idx in [f.ID,f.FORM,f.LEMMA,f.CPOS,f.POS,f.FEAT,f.HEAD,f.DEPREL,f.DEPS,f.MISC]) # take idx,token,lemma,pos,pos,feat,deprel,head
             tree+=l+u"\n"
         tree+=u"\n" #conll-u expects an empty line at the end of every tree
         tree+=footer
