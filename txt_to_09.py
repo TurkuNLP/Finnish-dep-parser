@@ -16,6 +16,7 @@ if args.d and os.path.isfile(args.d):
     with open(args.d,"r") as f:
         hashes=json.load(f)
 
+comment=False
 for lineIdx,line in enumerate(sys.stdin):
     line=unicode(line,"utf-8").rstrip()
     if not line or line.startswith(u"###START") or line.startswith(u"###END"):
