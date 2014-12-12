@@ -54,7 +54,7 @@ def der_changes(r):
         elif Der==u"<Der_tse>": r=re.sub(u"<Adv><Prl>",u"<Adv>",r)
         elif Der==u"<Der_ttain>": r=re.sub(u"<Adv><Dis>",u"<Adv>",r)
         elif Der==u"<Der_sti>": r=re.sub(u"<Adv><Comp>",u"<Adv>",r)
-        if u"[DRV=UUS]" in r: r=re.sub(u"\[DRV=UUS\]",u"",r) #deletes DRV=UUS-tag
+        ##if u"[DRV=UUS]" in r: r=re.sub(u"\[DRV=UUS\]",u"",r) #deletes DRV=UUS-tag, not needed anymore
     r=re.sub(u"<cap>",u"",r)
     r=re.sub(u"<Cap>",u"",r)
     r=re.sub(u"<CAP>",u"",r)
