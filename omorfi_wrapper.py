@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import sys
 import logging
 logging.basicConfig(level=logging.WARNING)
@@ -9,6 +10,8 @@ logging.basicConfig(level=logging.WARNING)
 import subprocess
 
 SCRIPTDIR=os.path.dirname(os.path.abspath(__file__))
+
+malformed_drv_re=re.compile(ur"\[DRV=(.*?)\]",re.U)
 
 class HFSTError(Exception): pass
 
@@ -48,8 +51,10 @@ class OmorfiWrapper(object):
             if line.strip() == "":
                 break
             res = line.strip().split("\t")[1:3]
+            res[0]=malformed_drv_re.sub(lambda match: "<Der_"+match.group(1).lower()+">",res[0])
             if len(res)!=2:
                 continue #bad data, unrecognized token?
+            
             results.append(tuple(res))
         self.log.info("Got %d results, returning" % len(results))
         return results
