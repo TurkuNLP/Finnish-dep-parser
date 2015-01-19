@@ -74,7 +74,8 @@ echoc "Downloading Omorfi java implementation (morphological analyzer)"
 runc wget http://sourceforge.net/projects/hfst/files/optimized-lookup/hfst-ol.jar/download -O hfst-ol.jar
 
 echoc "Downloading the parser binary from http://mate-tools.googlecode.com/files/anna-3-1.jar"
-runc wget http://mate-tools.googlecode.com/files/anna-3-1.jar
+runc wget http://mate-tools.googlecode.com/files/anna-3.61.jar
+runc mv anna-3.61.jar anna.jar
 
 echoc "Picking a local version of Marmot"
 runc cp ../LIBS-LOCAL/marmot/marmot-2014-10-22.jar marmot.jar
