@@ -10,6 +10,17 @@ logging.basicConfig(level=logging.WARNING)
 import traceback
 import omorfi_pos as omor
 
+def load_readings(m_readings):
+    words={} #{wordform -> set of (lemma,pos,feat)}
+    with codecs.open(m_readings,"r","utf-8") as f:
+        for line in f:
+            line=line.rstrip(u'\n')
+            if not line:
+                continue
+            form, lemma, pos, feat=line.split(u' ')
+            words.setdefault(form,set()).add((lemma,pos,feat))
+    return words
+
 if __name__=="__main__":
     log = logging.getLogger("omorfi")
     from optparse import OptionParser
@@ -18,25 +29,47 @@ if __name__=="__main__":
     parser.add_option("--tempdir", dest="tempdir",action="store",default=".", help="Where temporary files should be kept. Default to current dir.")
     parser.add_option("-m", "--model", dest="model",action="store", default=None,help="Fill PLEMMA/PPOS/PFEAT using this marmot model",metavar="MODELFILE")
     parser.add_option("--marmot", dest="marmotbin",action="store", default=None,help="marmot .jar file")
+    parser.add_option("--mreadings",action="store", default=None,help="File with the morphological readings")
+    parser.add_option("--ud",action="store_true", default=False,help="UD")
     (options, args) = parser.parse_args()
+
+    if options.mreadings:
+        readings=load_readings(options.mreadings)
+    else:
+        readings=None
 
     if options.train:
         for line in sys.stdin:
             line=unicode(line,"utf-8").strip()
+            if line.startswith(u"#"):
+                continue
             if not line:
                 print
                 continue
             cols=line.split(u"\t")
-            assert len(cols) in (13,14,15)
-            idx,token,pos,feat=int(cols[0]),cols[1],cols[4],cols[6]
+            if len(cols)==10: #UD
+                idx,token,pos,feat=int(cols[0]),cols[1],cols[3],cols[5]
+            else:
+                assert len(cols) in (13,14,15)
+                idx,token,pos,feat=int(cols[0]),cols[1],cols[4],cols[6]
             tagList=[None for x in range(17)]
             #tagList[0]=pos
-            if feat!=u"_":
-                for cat_tag in feat.split(u"|"):
-                    cat,tag=cat_tag.split(u"_",1)
-                    tagList[omor.cat2idx[cat]]=tag
-            s=omor.hun_taglist2tagstring(tagList)
-            pos_set=set(omor.hun_possiblepos(token))
+            if options.ud:
+                pos_set=set(x[1] for x in readings.get(token,[]))
+                s=feat
+            else:
+                if feat!=u"_":
+                    for cat_tag in feat.split(u"|"):
+                        if u"=" in cat_tag:
+                            cat,tag=cat_tag.split(u"=",1)
+                        else:
+                            cat,tag=cat_tag.split(u"_",1)
+                        if cat not in omor.cat2idx:
+                            print >> sys.stderr, "Unknown cat:", cat
+                        else:
+                            tagList[omor.cat2idx[cat]]=tag
+                s=omor.hun_taglist2tagstring(tagList)
+                pos_set=set(omor.hun_possiblepos(token))
             #pos_set.add(pos)
             marmot_feats=u"#".join(u"POS_"+x for x in sorted(pos_set))
             if not marmot_feats:
