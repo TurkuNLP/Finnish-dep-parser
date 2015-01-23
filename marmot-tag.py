@@ -21,6 +21,21 @@ def load_readings(m_readings):
             words.setdefault(form,set()).add((lemma,pos,feat))
     return words
 
+def score(ppos,pfeat,pos,feat):
+    s=0
+    if ppos==pos:
+        s+=1
+    pfeat_set=set(pfeat.split(u"|"))
+    feat_set=set(feat.split(u"|"))
+    s+=len(pfeat_set & feat_set)
+    return s
+
+def best_reading(plemma,ppos,pfeat,readings):
+    if not readings:
+        return plemma,ppos,pfeat
+    best=max(((lemma,pos,feat,score(ppos,pfeat,pos,feat)) for lemma,pos,feat in readings),key=lambda k:k[3])
+    return best[0],ppos,pfeat#best[1],best[2]
+
 if __name__=="__main__":
     log = logging.getLogger("omorfi")
     from optparse import OptionParser
@@ -82,14 +97,19 @@ if __name__=="__main__":
         lines=[]
         for line in sys.stdin:
             line=unicode(line,"utf-8").strip()
+            if line.startswith(u"#"):
+                continue
             lines.append(line)
             cols=line.split(u"\t")
             if len(cols)==1:
                 print >> f
                 continue
-            else:
-                assert len(cols) in (13,14,15)
-                pos_set=set(omor.hun_possiblepos(cols[1]))
+            else:                
+                assert len(cols) in (10,13,14,15)
+                if options.ud:
+                    pos_set=set(x[1] for x in readings.get(cols[1],[]))
+                else:
+                    pos_set=set(omor.hun_possiblepos(cols[1]))
                 marmot_feats=u"#".join(u"POS_"+x for x in sorted(pos_set))
                 if not marmot_feats:
                     marmot_feats=u"_"
@@ -116,7 +136,6 @@ if __name__=="__main__":
             log.error("""Did not succeed in launching 'LIBS/%s'. The most common reason for this is that you forgot to run './install.sh'. \n\nGiving up, because the parser cannot run without a tagger."""%(" ".join(args)))
             sys.exit(1)
 
-        
         while predictions[-1]==[u''] or not predictions[-1]:
             predictions.pop(-1)
         while lines[-1]==u'':
@@ -124,40 +143,66 @@ if __name__=="__main__":
         
         newSent=True
         assert len(lines)==len(predictions), (len(lines),len(predictions))
-        for inLine,pred in zip(lines,predictions):
-            inCols=inLine.split(u"\t")
-            if len(inCols)==1:
-                assert inCols[0]==u""
-                assert pred==[u""]
-                print
-                newSent=True
-                continue #New sentence starts
-            assert inCols[1]==pred[1] #Tokens must match
-            txt=inCols[1]
-            if omor.is_punct(txt):
-                plemma,ppos,pfeat=txt,u"Punct",u"_"
-            elif omor.is_num(txt):
-                plemma,ppos,pfeat=txt,u"Num",u"_"
-            else:
-                tl=u"POS_"+pred[5]
-                if pred[7]!=u"_":
-                    tl+=u"|"+pred[7]
-                plemma,ptaglist=omor.hun_tag2omorfi(pred[1],tl) #Find the most plausible reading
-                omor.fill_ortho(txt,ptaglist)
-                if txt==u"*null*":
-                    ptaglist[omor.cat2idx[u"OTHER"]]=None
-                ppos=ptaglist[0]
-                #Guess proper nouns
-#                if ppos==u"N" and not newSent and ptaglist[omor.cat2idx[u"CASECHANGE"]]==u"Up" and ptaglist[omor.cat2idx[u"OTHER"]]==u"UNK":
-#                    ptaglist[omor.cat2idx[u"SUBCAT"]]=u"Prop"
-                pfeat=[]
-                for cat,tag in zip(omor.cat_list[1:],ptaglist[1:]):
-                    if tag!=None:
-                        pfeat.append(cat+u"_"+tag)
-                if not pfeat:
-                    pfeat=u"_"
+        if options.ud:
+            for inLine,pred in zip(lines,predictions):
+                inCols=inLine.split(u"\t")
+                if len(inCols)==1:
+                    assert inCols[0]==u""
+                    assert pred==[u""]
+                    print
+                    newSent=True
+                    continue #New sentence starts
+                assert inCols[1]==pred[1] #Tokens must match
+                txt=inCols[1]
+                ppos=pred[5]
+                pfeat=pred[7]
+                plemma,ppos,pfeat=best_reading(txt,ppos,pfeat,readings.get(txt,[]))
+                if len(inCols)==10:
+                    inCols[2],inCols[3],inCols[5]=plemma,ppos,pfeat
                 else:
-                    pfeat=u"|".join(pfeat)
-            inCols[3],inCols[5],inCols[7]=plemma,ppos,pfeat
-            print (u"\t".join(inCols)).encode("utf-8")
-            newSent=False
+                    inCols[3],inCols[5],inCols[7]=plemma,ppos,pfeat
+                print (u"\t".join(inCols)).encode("utf-8")
+                newSent=False
+
+        else:
+
+            for inLine,pred in zip(lines,predictions):
+                inCols=inLine.split(u"\t")
+                if len(inCols)==1:
+                    assert inCols[0]==u""
+                    assert pred==[u""]
+                    print
+                    newSent=True
+                    continue #New sentence starts
+                assert inCols[1]==pred[1] #Tokens must match
+                txt=inCols[1]
+                if omor.is_punct(txt):
+                    plemma,ppos,pfeat=txt,u"Punct",u"_"
+                elif omor.is_num(txt):
+                    plemma,ppos,pfeat=txt,u"Num",u"_"
+                else:
+                    tl=u"POS_"+pred[5]
+                    if pred[7]!=u"_":
+                        tl+=u"|"+pred[7]
+                    plemma,ptaglist=omor.hun_tag2omorfi(pred[1],tl) #Find the most plausible reading
+                    omor.fill_ortho(txt,ptaglist)
+                    if txt==u"*null*":
+                        ptaglist[omor.cat2idx[u"OTHER"]]=None
+                    ppos=ptaglist[0]
+                    #Guess proper nouns
+    #                if ppos==u"N" and not newSent and ptaglist[omor.cat2idx[u"CASECHANGE"]]==u"Up" and ptaglist[omor.cat2idx[u"OTHER"]]==u"UNK":
+    #                    ptaglist[omor.cat2idx[u"SUBCAT"]]=u"Prop"
+                    pfeat=[]
+                    for cat,tag in zip(omor.cat_list[1:],ptaglist[1:]):
+                        if tag!=None:
+                            pfeat.append(cat+u"_"+tag)
+                    if not pfeat:
+                        pfeat=u"_"
+                    else:
+                        pfeat=u"|".join(pfeat)
+                if len(inCols)==10:
+                    inCols[2],inCols[3],inCols[5]=plemma,ppos,pfeat
+                else:
+                    inCols[3],inCols[5],inCols[7]=plemma,ppos,pfeat
+                print (u"\t".join(inCols)).encode("utf-8")
+                newSent=False
