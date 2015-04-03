@@ -73,6 +73,7 @@ runc cd LIBS
 echoc "Downloading Omorfi java implementation (morphological analyzer)"
 runc wget http://sourceforge.net/projects/hfst/files/optimized-lookup/hfst-ol.jar/download -O hfst-ol.jar
 
+
 echoc "Downloading the parser binary from http://mate-tools.googlecode.com/files/anna-3-1.jar"
 runc wget http://mate-tools.googlecode.com/files/anna-3-1.jar
 
@@ -85,6 +86,10 @@ runc tar zxf apache-opennlp-1.5.3-bin.tar.gz
 
 #runc select_hunpos_binary  #This checks which hunpos works (the downloaded binary, or the binary included here) and makes a symlink to LIBS/hunpos-tag
 runc select_hfstol
+
+echoc "Downloading marmot model"
+runc wget http://bionlp-www.utu.fi/Finnish-parser-models/UD.1/fin_model.marmot -O ../model/fin_model.marmot
+
 
 runc cd ..
 echo
