@@ -171,7 +171,7 @@ def analyze_taglist(tags,retForm=RET_LIST):
         return pos,tagString
     elif retForm==RET_POS_FEAT_TDT:
         pos=ct_dict[u"POS"]
-        tagString=u"|".join(cat+u"_"+ct_dict[cat] for cat in cat_list if cat!=u"POS" and cat in ct_dict)
+        tagString=u"|".join(cat+u"="+ct_dict[cat] for cat in cat_list if cat!=u"POS" and cat in ct_dict)
         return pos,tagString
 
 UNIQUE_NOLEMMA=0
@@ -468,13 +468,16 @@ if __name__=="__main__":
                 continue
             readings=omorfi_lookup(token)
             if not readings:
-                print (token+u"\t+?").encode(u"utf-8")
+                #print (token+u"\t+?").encode(u"utf-8")
+                continue
             for r in readings:
                 if options.orig==False:
                     try:
                         lemma,taglist=analyze_reading(r)
                         pos,tags=analyze_taglist(taglist,retForm=RET_POS_FEAT_TDT)
-                        print (token+u"\t"+lemma).encode(u"utf-8"),pos.encode(u"utf-8"),tags.encode(u"utf-8")
+                        if not tags:
+                            tags=u"_"
+                        print (u"%s\t%s\t%s\t%s"%(token,lemma,pos,tags)).encode("utf-8")
                     except:
                         pass
                         

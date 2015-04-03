@@ -4,10 +4,10 @@ set -u
 set -e
 shopt -s failglob
 
-INPUT=input.txt
-OUTPUT=output.txt
+INPUT=$2
+OUTPUT=$3
 
-WORKDIR=work
+WORKDIR=$1
 
 # clean up possible previous versions
 rm -rf $OUTPUT
