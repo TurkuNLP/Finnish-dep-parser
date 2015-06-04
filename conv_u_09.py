@@ -7,6 +7,7 @@ ID,FORM,LEMMA,PLEMMA,POS,PPOS,FEAT,PFEAT,HEAD,PHEAD,DEPREL,PDEPREL=range(12)
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='Convert conllu to conll09 and back. Infers the direction on its own if no arguments given.')
     parser.add_argument('--output-format', default=None, help='Output format can be "u" or "09". If the input is in this format already, the conversion is a no-op and simply passes data through.')
+    parser.add_argument('--drop-comments', default=False, action="store_true", help='Remove comments from the data')
     args = parser.parse_args()
     
     for line in sys.stdin:
@@ -14,7 +15,8 @@ if __name__=="__main__":
         if not line:
             print
         elif line.startswith('#'):
-            print line
+            if not args.drop_comments:
+                print line
         else:
             cols=line.split('\t')
             if len(cols)==10:
