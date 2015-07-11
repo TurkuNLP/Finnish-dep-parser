@@ -13,4 +13,9 @@ fi
 
 cat | $PYTHON check_encoding.py | $PYTHON hash_comments.py -d $TMPDIR/comment_hashes.json > $TMPDIR/hashed_text.txt
 
-cat $TMPDIR/hashed_text.txt | opennlp SentenceDetector model/fi-sent.bin | opennlp TokenizerME model/fi-token.bin | $PYTHON txt_to_09.py -d $TMPDIR/comment_hashes.json
+if [[ "$1" == "--no-sent-split" ]]
+then
+    cat $TMPDIR/hashed_text.txt | grep -Pv '^\s*$' | opennlp TokenizerME model/fi-token.bin | $PYTHON txt_to_09.py -d $TMPDIR/comment_hashes.json
+else
+    cat $TMPDIR/hashed_text.txt | opennlp SentenceDetector model/fi-sent.bin | opennlp TokenizerME model/fi-token.bin | $PYTHON txt_to_09.py -d $TMPDIR/comment_hashes.json
+fi
