@@ -73,7 +73,7 @@ def rewrite_CASE(word):
         warn('not generating Case Lat')
         return []
     else:
-        assert False, 'unknown CASE value ' + value
+        return [] #assert False, 'unknown CASE value ' + value
 
 def rewrite_CASECHANGE(word):
     # In Omorfi output, the feature "CASECHANGE" marks a small number
@@ -103,7 +103,8 @@ def rewrite_CLIT(word):
         elif value == 'Foc_s':
             mapped.append('S')
         else:
-            assert False, 'unknown CLIT value ' + value
+            #assert False, 'unknown CLIT value ' + value
+            pass
 
     return [('Clitic', ','.join(sorted(mapped)))]
 
@@ -120,7 +121,7 @@ def rewrite_CMP(word):
     elif value == 'Superl':
         return [('Degree', 'Sup')]
     else:
-        assert False, 'unknown CMP value ' + value
+        return [] #assert False, 'unknown CMP value ' + value
 
 def rewrite_DRV(word):
     value = word.feat_map()['DRV']
@@ -216,7 +217,7 @@ def rewrite_INF(word):
     elif infvalue == 'Inf3':
         return [('InfForm', '3')]
     else:
-        assert False, 'unknown INF value ' + infvalue
+        return [] #assert False, 'unknown INF value ' + infvalue
 
 def rewrite_MOOD(word):
     value = word.feat_map()['MOOD']
@@ -242,7 +243,7 @@ def rewrite_MOOD(word):
         warn('mapping eventive mood to potential')
         return [('Mood', 'Pot')]
     else:
-        assert False, 'unknown MOOD value ' + value
+        return [] #assert False, 'unknown MOOD value ' + value
 
 def rewrite_NEG(word):
     value = word.feat_map()['NEG']
@@ -265,7 +266,7 @@ def rewrite_OTHER(word):
     elif value == 'Err':
         return [('Typo', 'Yes')]
     else:
-        assert False, 'unknown OTHER value ' + value
+        return [] #assert False, 'unknown OTHER value ' + value
 
 
 def rewrite_PCP(word):
@@ -292,7 +293,8 @@ def rewrite_PCP(word):
         # TODO: remove SUBCAT=Neg
         return [('PartForm', 'Neg')]
     else:
-        assert False, 'unknown PCP value ' + pcpvalue
+        return []
+        #assert False, 'unknown PCP value ' + pcpvalue
 
     return []
 
@@ -311,7 +313,8 @@ def rewrite_POSS(word):
     elif value == 'Px3':
         return [('Person[psor]', '3')]
     else:
-        assert False, 'unknown POSS value ' + value
+        return []
+        #assert False, 'unknown POSS value ' + value
 
 def rewrite_VERB_SUBCAT(word):
     fmap = word.feat_map()
@@ -329,7 +332,8 @@ def rewrite_VERB_SUBCAT(word):
     if value == 'Neg':
         return [('Negative', 'Yes')]
     else:
-        assert False, 'unknown VERB/AUX SUBCAT ' + value
+        return []
+        #assert False, 'unknown VERB/AUX SUBCAT ' + value
 
 def rewrite_NOUN_SUBCAT(word):
     value = word.feat_map()['SUBCAT']
@@ -349,7 +353,8 @@ def rewrite_NOUN_SUBCAT(word):
     elif value in ('Acro', 'Abbr'):
         return [('Abbr', 'Yes')]
     else:
-        assert False, 'unknown NOUN SUBCAT ' + value
+        return []
+        #assert False, 'unknown NOUN SUBCAT ' + value
 
     return []
 
@@ -362,7 +367,8 @@ def rewrite_CONJ_SUBCAT(word):
     elif value == 'CS':
         assert word.cpostag == 'SCONJ'
     else:
-        assert False, 'unknown CONJ SUBCAT ' + value
+        return []
+        #assert False, 'unknown CONJ SUBCAT ' + value
     return []
 
 def rewrite_PRON_SUBCAT(word):
@@ -393,7 +399,8 @@ def rewrite_PRON_SUBCAT(word):
         warn('mapping PRON SUBCAT ' + value + ' to Ind')
         return [('PronType', 'Ind')]
     else:
-        assert False, 'unknown PRON SUBCAT value ' + value
+        return []
+        #assert False, 'unknown PRON SUBCAT value ' + value
 
 def rewrite_ADJ_SUBCAT(word):
     value = word.feat_map()['SUBCAT']
@@ -411,7 +418,8 @@ def rewrite_ADJ_SUBCAT(word):
         # see https://github.com/TurkuNLP/UniversalFinnish/issues/60
         warn('not mapping ADJ SUBCAT Pfx')
     else:
-        assert False, 'unknown ADJ SUBCAT ' + value
+        return []
+        #assert False, 'unknown ADJ SUBCAT ' + value
 
     return []
 
@@ -425,7 +433,7 @@ def rewrite_ADP_SUBCAT(word):
     elif value == 'Po':
         return [('AdpType', 'Post')]
     else:
-        assert False, 'unknown ADP SUBCAT ' + value
+        #assert False, 'unknown ADP SUBCAT ' + value
         return []
 
 def rewrite_NUM_SUBCAT(word):
@@ -437,7 +445,7 @@ def rewrite_NUM_SUBCAT(word):
     elif value == 'Ord':
         return [('NumType', 'Ord')]
     else:
-        assert False, 'unknown NUM SUBCAT ' + value
+        #assert False, 'unknown NUM SUBCAT ' + value
         return []
 
 subcat_rewrite_func = [
@@ -473,7 +481,8 @@ def rewrite_NUM(word):
     elif value == 'Pl':
         return [('Number', 'Plur')]
     else:
-        assert False, 'unknown NUM value %s' % value
+        #assert False, 'unknown NUM value %s' % value
+        return []
 
 def rewrite_TENSE(word):
     if word.cpostag not in VERB_TAGS:
@@ -485,7 +494,7 @@ def rewrite_TENSE(word):
     elif value == 'Prt':
         return [('Tense', 'Past')]
     else:
-        assert False, 'unknown TENSE value %s' % value
+        return [] #assert False, 'unknown TENSE value %s' % value
 
 def rewrite_VOICE(word):
     if word.cpostag not in VERB_TAGS:
@@ -497,7 +506,7 @@ def rewrite_VOICE(word):
     elif value == 'Pass':
         return [('Voice', 'Pass')]
     else:
-        assert False, 'unknown VOICE value %s' % value
+        return [] #assert False, 'unknown VOICE value %s' % value
 
 def rewrite_PRS(word):
     if word.cpostag not in VERB_TAGS:
