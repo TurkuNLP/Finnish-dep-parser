@@ -13,7 +13,7 @@ cd $SCRIPT
 
 export PATH=$PATH:$THIS/LIBS/apache-opennlp-1.5.3/bin/:$THIS/LIBS
 
-## Uncomment for real temp directory
+## Uncomment for real temp directory, ie if you plan to run several instances on top of each other
 #export TMPDIR=`mktemp -d --tmpdir=.` || exit #Get me a temporary directory for intermediate files or die
 export TMPDIR=tmp_data ; mkdir -p $TMPDIR #fixed tmpdir, comment out if you uncomment the line above
 
