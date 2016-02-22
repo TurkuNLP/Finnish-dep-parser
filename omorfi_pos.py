@@ -305,6 +305,14 @@ def omorfi_lookup(token):
     s=omorfi_postprocess(token,readings)
     return resolve_readings.main(s)
 
+def omorfi_lookup_plain(token):
+    global OmorTransducer
+    if OmorTransducer==None:
+        raise ValueError("Omorfi is not loaded correctly, cannot do lookup")
+    #r is returned as utf-8 byte string, so first decode to Unicode, then erase the @[A-Za-z.]+@ tags
+    readings=[atRe.sub(u"",unicode(r,"utf-8")) for r,score in OmorTransducer.lookup(token.encode("utf-8"))]
+    return readings
+
 ######### SUPPORT FUNCTIONS FOR POS-TAGGING ########################
 
 def is_punct(s):
@@ -448,7 +456,10 @@ if __name__=="__main__":
             except EOFError:
                 print
                 break
-            readings=omorfi_lookup(unicode(s,"utf-8"))
+            if options.orig==False:
+                readings=omorfi_lookup(unicode(s,"utf-8"))
+            else:
+                readings=omorfi_lookup_plain(unicode(s,u"utf-8"))
             if not readings:
                 print "--unrecognized--"
                 print
@@ -466,7 +477,10 @@ if __name__=="__main__":
             token=unicode(token,"utf-8").strip()
             if not token:
                 continue
-            readings=omorfi_lookup(token)
+            if options.orig==False:
+                readings=omorfi_lookup(token)
+            else:
+                readings=omorfi_lookup_plain(token)
             if not readings:
                 #print (token+u"\t+?").encode(u"utf-8")
                 continue
