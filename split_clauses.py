@@ -88,7 +88,7 @@ def split(args):
         for token in sent:
             head=int(token[HEAD])
             if head==0:
-                tree.add_dep(0,int(token[ID]),u"ROOT",u"_")
+                tree.add_dep(0,int(token[ID]),u"root",u"_")
             else:
                 tree.add_dep(head,int(token[ID]),token[DEPREL],u"|".join(m for m in [token[CPOS],token[FEAT]]))
         # now dictionary is ready, start search from root
