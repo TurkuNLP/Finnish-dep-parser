@@ -75,7 +75,7 @@ runc wget http://sourceforge.net/projects/hfst/files/optimized-lookup/hfst-ol.ja
 
 
 echoc "Downloading the parser binary from http://mate-tools.googlecode.com/files/anna-3-1.jar"
-runc wget http://mate-tools.googlecode.com/files/anna-3-1.jar
+runc wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/mate-tools/anna-3.6.jar #http://mate-tools.googlecode.com/files/anna-3-1.jar
 
 echoc "Picking a local version of Marmot"
 runc cp ../LIBS-LOCAL/marmot/marmot-2014-10-22.jar marmot.jar
