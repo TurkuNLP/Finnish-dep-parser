@@ -29,7 +29,7 @@ These all are Java programs and tend to work fine anywhere with a sane Java inst
 
 The following command will run the entire pipeline (sentence splitting, tokenization, tagging, parsing) on a text file. All programs throughout the pipeline expect *UTF-8* as text encoding.
 
-    cat sometext.txt | ./parser_wrapper.sh > output.conll09
+    cat sometext.txt | ./parser_wrapper.sh > output.conllu
 
 # Parsing plain text with possible comments
 
@@ -38,13 +38,13 @@ comments (lines starting with `###C:`) into the input. These lines
 will be passes through the pipeline unchanged and preserved in the
 output.
 
-    cat sometext.txt | ./split_text_with_comments.sh | ./parse_conll.sh > output.conll09
+    cat sometext.txt | ./split_text_with_comments.sh | ./parse_conll.sh > output.conllu
 
-# Parsing CoNLL-09 formatted input
+# Parsing CoNLL-U formatted input
   
-    cat input.conll09 | ./parse_conll.sh > output.conll09
+    cat input.conllu | ./parse_conll.sh > output.conllu
 
-Note that comments (lines in the CoNLL-09 file that start with `#`)
+Note that comments (lines in the CoNLL-U file that start with `#`)
 will be preserved and passed through the pipeline unchanged. Make sure
 the comments immediately precede the next sentence, i.e. there
 should not be an empty line between the comments and the first token
@@ -54,28 +54,25 @@ of the sentence.
 
 Parser output trees can be visualized by using the following command and opening the resulting .html file in a modern web browser. Use the `--max_sent` parameter to limit the number of trees shown.
 
-    cat output.conll09 | python visualize.py > output.html
+    cat output.conllu | python visualize.py > output.html
     
 # Testing
 
-The `data` directory contains two files: `wiki-test.txt` is a small piece of text from the Finnish Wikipedia and `tdt_test_set.conll09` is the (blank) official test set of the TDT treebank. You can parse these files as follows:
+The `data` directory contains the file `wiki-test.txt` which is a small piece of text from the Finnish Wikipedia. You can parse it as follows:
 
-    cat data/wiki-test.txt | ./parser_wrapper.sh > wiki-test-parsed.txt
-    cat data/tdt_test_set.conll09 | ./parse_conll.sh > tdt_test_set_parsed.conll09
-    
-To check that everything went fine, you can upload `tdt_test_set_parsed.conll09` to [the TDT treebank test service](http://bionlp-www.utu.fi/tdteval/) and check that the LAS is around 81.6%.
+    cat data/wiki-test.txt | ./parser_wrapper.sh > wiki-test-parsed.conllu
 
 # Other features
 
 ## Splitting sentences into clauses
 
-    cat output.conll09 | python split_clauses.py > output_clauses.conll09
+    cat output.conllu | python split_clauses.py > output_clauses.conllu
     
-This script uses the two last columns in the CONLL-09 format to mark the clause boundaries.
+This script uses the two last columns in the CONLL-U format to mark the clause boundaries.
 
 ## Visualizing clauses
 
 Separate clauses can be visualized by using the following command and opening the resulting .html file in a modern web browser. Use the `--max_sent` parameter to limit the number of trees shown.
 
-    cat output_clauses.conll09 | python visualize_clauses.py > output_clauses.html
+    cat output_clauses.conllu | python visualize_clauses.py > output_clauses.html
     
