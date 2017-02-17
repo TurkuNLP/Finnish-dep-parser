@@ -326,11 +326,10 @@ def rewrite_VERB_SUBCAT(word):
     if fmap.get('VerbForm') == 'Part':
         return []
 
-    # TODO: should 'Negative=No' be generated for others?
     # see http://universaldependencies.github.io/docs/u/feat/Negative.html
 
     if value == 'Neg':
-        return [('Negative', 'Yes')]
+        return [('Polarity', 'Neg')]
     else:
         return []
         #assert False, 'unknown VERB/AUX SUBCAT ' + value
