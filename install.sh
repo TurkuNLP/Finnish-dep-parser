@@ -78,7 +78,7 @@ echoc "Downloading the parser binary from https://storage.googleapis.com/google-
 runc wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/mate-tools/anna-3.61.jar
 
 echoc "Picking a local version of Marmot"
-runc cp ../LIBS-LOCAL/marmot/marmot-2014-10-22.jar marmot.jar
+runc cp ../LIBS-LOCAL/marmot/marmot-2015-10-22.jar marmot.jar
 
 echoc "Downloading Apache OpenNLP (sentence splitter and tokenizer)"
 runc wget http://mirror.netinch.com/pub/apache/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
