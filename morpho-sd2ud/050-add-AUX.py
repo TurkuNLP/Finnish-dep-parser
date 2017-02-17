@@ -27,6 +27,7 @@ aux_lemmas = set([
     u'tarvita',
     u'täytyä',
     u'voida',
+    u'ei',
 ])
 
 def extra_aux(word):
