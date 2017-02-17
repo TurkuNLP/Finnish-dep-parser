@@ -527,6 +527,10 @@ def rewrite_PRS(word):
         return [('Person', '2'), ('Number', 'Plur')]
     elif value == 'Pl3':
         return [('Person', '3'), ('Number', 'Plur')]
+    elif value == 'Sg0':
+        return [('Person', '0'), ('Number', 'Sing')]
+    elif value == 'Pl0':
+        return [('Person', '0'), ('Number', 'Plur')]
     else:
         warn('unmapped PRS '+word.feat_map()['PRS'])
         return []

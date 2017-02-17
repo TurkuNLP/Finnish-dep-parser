@@ -41,9 +41,28 @@ def extra_aux(word):
     aux.cpostag = 'AUX'
     return aux
 
+def extra_person(word):
+    """Return "extra" Person=0 reading for verbs that can serve as zero person,
+    None for others."""
+    if word.cpostag != 'V':
+        return None
+    if "MOOD=Ind" not in word._feats or ("PRS=Sg3" not in word._feats and "PRS=Pl3" not in word._feats): # if Ind and Sg3/Pl3, add Sg0
+        return None
+    zero = deepcopy(word)
+    zero._feats = [feat if feat!="PRS=Sg3" else "PRS=Sg0" for feat in zero._feats]
+    zero._feats = [feat if feat!="PRS=Pl3" else "PRS=Pl0" for feat in zero._feats]
+    return zero
+
 def add_aux(sentence, out):
     for w in sentence.words():
         a = extra_aux(w)
+        if a is not None:
+            print >> out, unicode(a)
+    return sentence
+
+def hack_person0(sentence, out):
+    for w in sentence.words():
+        a = extra_person(w)
         if a is not None:
             print >> out, unicode(a)
     return sentence
@@ -53,6 +72,7 @@ def process(inf, outf):
         print >> outf, unicode(s)
         if not isinstance(s, basestring): # skip comments and sentence breaks
             add_aux(s, outf)
+            hack_person0(s, outf) # I need to add possible Person=0 option, I don't know where else to put it than here... -J
             
 def main(argv=None):
     if argv is None:
