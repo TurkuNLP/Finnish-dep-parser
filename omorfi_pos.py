@@ -271,8 +271,10 @@ def omorfi_tag_tset(tSet):
 
 capRe=re.compile(ur"<(Cap|cap|CAP)>",re.U) #The @....@ tags in the transducer output, want to get rid of them
 pxRe=re.compile(ur"<Px(Sg|Pl)3>",re.U)
+olla_pl1=set("olemme,olemmeko,olemmehan,olemmekaan,olemmekos,olemmepa,olemmekohan,olemmepas,olemmeks".split(","))
+olla_pl2=set("olette,oletteko,olettehan,olettekaan,olettekos,olettepa,olettekohan,olettepas,oletteks".split(","))
 def omorfi_postprocess(token,readings):
-    global additionalReadings #See at the beginning
+    global additionalReadings,olla_pl1,olla_pl2 #See at the beginning
     #The raw output of Omorfi is fed through here, adding additional readings, doing things like <CC> & <CS>, etc
     #Pcle2Adv
     readings=[r.replace(u"Pcle",u"Adv") for r in readings]
@@ -281,6 +283,11 @@ def omorfi_postprocess(token,readings):
     readings=[capRe.sub(u"",r) for r in readings] #Remove cap if any
     if is_up(token):
         readings=[r+u"<Up>" for r in readings]
+
+    if token.lower() in olla_pl1: # omorfi says 'olemme' and 'olette' are pl3
+        readings=[r.replace(u"<Pl3>",u"<Pl1>") for r in readings]
+    if token.lower() in olla_pl2:
+        readings=[r.replace(u"<Pl3>",u"<Pl2>") for r in readings]
     res=set(readings)
     for r in readings:
         res.add(r.replace(u"<CC>",u"<CS>"))
