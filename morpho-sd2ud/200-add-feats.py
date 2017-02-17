@@ -183,9 +183,9 @@ def add_Foreign(word):
     if word.postag != 'Foreign':
         return []
     elif has_nonlatin_alpha(word.form):
-        return [('Foreign', 'Fscript')]
+        return [('Foreign', 'Yes')]
     else:
-        return [('Foreign', 'Foreign')]
+        return [('Foreign', 'Yes')]
 
 add_funcs = [
     add_VerbForm,
