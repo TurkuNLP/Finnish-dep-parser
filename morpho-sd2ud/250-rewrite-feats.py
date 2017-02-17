@@ -12,7 +12,7 @@ usage = '%s IN OUT' % os.path.basename(__file__)
 
 VERB_TAGS = set(['VERB', 'AUX'])
 NOUN_TAGS = set(['NOUN', 'PROPN'])
-CONJ_TAGS = set(['CONJ', 'SCONJ'])
+CONJ_TAGS = set(['CCONJ', 'SCONJ'])
 PRON_TAGS = set(['PRON'])
 ADJ_TAGS = set(['ADJ'])
 ADP_TAGS = set(['ADP'])
@@ -363,7 +363,7 @@ def rewrite_CONJ_SUBCAT(word):
 
     # CC/SC distinction should already be encoded in POS, just check
     if value == 'CC':
-        assert word.cpostag == 'CONJ'
+        assert word.cpostag == 'CCONJ'
     elif value == 'CS':
         assert word.cpostag == 'SCONJ'
     else:

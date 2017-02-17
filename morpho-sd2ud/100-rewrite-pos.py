@@ -36,7 +36,7 @@ def rewrite_C(word):
         assert False, 'missing subcat for C'
 
     if value == 'CC':
-        return 'CONJ'
+        return 'CCONJ'
     elif value == 'CS':
         return 'SCONJ'
     else:
