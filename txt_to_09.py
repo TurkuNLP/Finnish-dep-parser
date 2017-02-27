@@ -24,8 +24,9 @@ for lineIdx,line in enumerate(sys.stdin):
     tokens=line.split()
     if lineIdx!=0 and comment==False: # do not print empty line after comment
         print
-    if hashes and len(tokens)==1 and tokens[0] in hashes: # this is hashed comment, extract it
-        print hashes[tokens[0]].encode(u"utf-8")
+#    if hashes and len(tokens)==1 and tokens[0] in hashes: # this is hashed comment, extract it
+    if hashes and "".join(tokens) in hashes: # this is hashed comment, extract it, do not trust tokenizer to not split hash
+        print hashes["".join(tokens)].encode(u"utf-8")
         comment=True
         continue
     for tIdx,t in enumerate(tokens):
