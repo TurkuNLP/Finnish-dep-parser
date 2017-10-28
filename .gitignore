@@ -35,4 +35,8 @@ nosetests.xml
 .project
 .pydevproject
 
+# Dependencies and temp files
+LIBS/
+model/fin_model.marmot
+tmp_data/
 *~
