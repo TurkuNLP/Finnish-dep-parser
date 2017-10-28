@@ -6,7 +6,7 @@
 source init.sh
 
 cat > $TMPDIR/tagger_input.conll09
-cat $TMPDIR/tagger_input.conll09 | cut -f 2 | sort | uniq | python omorfi_pos.py > $TMPDIR/all_readings.sd
+cat $TMPDIR/tagger_input.conll09 | cut -f 2 | sort | uniq | $PYTHON omorfi_pos.py > $TMPDIR/all_readings.sd
 rm -rf $TMPDIR/morpho_conv_tmp
 TMPDIR_ABS=$($PYTHON abspath.py $TMPDIR)
 cd morpho-sd2ud
