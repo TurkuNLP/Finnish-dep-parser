@@ -25,7 +25,7 @@ for f in [0-9][0-9][0-9]-*; do
 
     echo >&2
     echo "Running $f $in $out ... " >&2
-    ./$f $in $out
+    $PYTHON $f $in $out
 
     echo -n "Checking $out ... " >&2
     inlines=`cat $in | wc -l`
