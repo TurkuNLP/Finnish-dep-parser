@@ -9,6 +9,7 @@ logging.basicConfig(level=logging.WARNING)
 
 import traceback
 import omorfi_pos as omor
+import cPickle as pickle
 
 def load_readings(m_readings):
     words={} #{wordform -> set of (lemma,pos,feat)}
@@ -30,11 +31,12 @@ def score(ppos,pfeat,pos,feat):
     s+=len(pfeat_set & feat_set)
     return s
 
-def best_reading(plemma,ppos,pfeat,readings):
+def best_reading(plemma,ppos,pfeat,readings,word_counts={}):
     if not readings:
         return plemma,ppos,pfeat
-    
-    best=max(((lemma,pos,feat,(score(ppos,pfeat,pos,feat),-lemma.count(u"#"))) for lemma,pos,feat in readings),key=lambda k:k[3])
+    alternatives=list(((lemma,pos,feat,(score(ppos,pfeat,pos,feat),-lemma.count(u"#"),word_counts.get(lemma,0))) for lemma,pos,feat in readings))
+#    print >> sys.stderr, "ALTERNATIVES", alternatives
+    best=max(alternatives,key=lambda k:k[3])
     if options.hard: 
         return best[0],best[1],best[2]
     elif options.hardpos and ppos in (x[1] for x in readings): ###Uncomment to improve your LAS by 2pp :)
@@ -54,12 +56,19 @@ if __name__=="__main__":
     parser.add_option("--ud",action="store_true", default=False,help="UD")
     parser.add_option("--hard",action="store_true", default=False,help="Use OMorFi hard constraint.")
     parser.add_option("--hardpos",action="store_true", default=False,help="Use OMorFi hard constraint if pos matches.")
+    parser.add_option("--word-counts",dest="wordcounts",action="store",default=None, help="Pickled dictionary of words and counts, used as an optional hint when resolving ambiguities")
     (options, args) = parser.parse_args()
 
     if options.mreadings:
         readings=load_readings(options.mreadings)
     else:
         readings=None
+
+    if options.wordcounts:
+        with open(options.wordcounts,"rb") as f:
+            word_counts=pickle.load(f)
+    else:
+        word_counts={}
 
     if options.train:
         for line in sys.stdin:
@@ -165,7 +174,7 @@ if __name__=="__main__":
                 txt=inCols[1]
                 ppos=pred[5]
                 pfeat=pred[7]
-                plemma,ppos,pfeat=best_reading(txt,ppos,pfeat,readings.get(txt,[]))
+                plemma,ppos,pfeat=best_reading(txt,ppos,pfeat,readings.get(txt,[]),word_counts)
                 if len(inCols)==10:
                     inCols[2],inCols[3],inCols[5]=plemma,ppos,pfeat
                 else:
