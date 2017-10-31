@@ -10,6 +10,7 @@ logging.basicConfig(level=logging.WARNING)
 import traceback
 import omorfi_pos as omor
 import cPickle as pickle
+import gzip
 
 def load_readings(m_readings):
     words={} #{wordform -> set of (lemma,pos,feat)}
@@ -65,7 +66,7 @@ if __name__=="__main__":
         readings=None
 
     if options.wordcounts:
-        with open(options.wordcounts,"rb") as f:
+        with gzip.open(options.wordcounts,"rb") as f:
             word_counts=pickle.load(f)
     else:
         word_counts={}
