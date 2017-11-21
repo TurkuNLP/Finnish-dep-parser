@@ -81,7 +81,7 @@ echoc "Picking a local version of Marmot"
 runc cp ../LIBS-LOCAL/marmot/marmot-2014-10-22.jar marmot.jar
 
 echoc "Downloading Apache OpenNLP (sentence splitter and tokenizer)"
-runc wget http://mirror.netinch.com/pub/apache/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
+runc wget https://archive.apache.org/dist/opennlp/opennlp-1.5.3/apache-opennlp-1.5.3-bin.tar.gz
 runc tar zxf apache-opennlp-1.5.3-bin.tar.gz
 
 #runc select_hunpos_binary  #This checks which hunpos works (the downloaded binary, or the binary included here) and makes a symlink to LIBS/hunpos-tag
