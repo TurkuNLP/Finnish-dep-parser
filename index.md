@@ -9,7 +9,7 @@ This project holds the dependency parsing pipeline being developed by the [Unive
 
 # Newer and substantially better version of the parser
 
-A new take on the trusty old Finnish-dep-parser with pretrained models for more than 50 languages is available at https://turkunlp.github.io/Turku-neural-parser-pipeline/. The new pipeline is fully neural and has a substantially better accuracy in all layers of prediction (segmentation, morphological tagging, syntax, lemmatization).
+A new take on the trusty old Finnish-dep-parser with pretrained models for more than 50 languages is available at [https://turkunlp.github.io/Turku-neural-parser-pipeline/](https://turkunlp.github.io/Turku-neural-parser-pipeline/). The new pipeline is fully neural and has a substantially better accuracy in all layers of prediction (segmentation, morphological tagging, syntax, lemmatization).
 
 # Download (old version)
 
