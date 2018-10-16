@@ -7,7 +7,11 @@ title:  'Finnish-dep-parser'
 
 This project holds the dependency parsing pipeline being developed by the [University of Turku NLP group](http://bionlp.utu.fi). This is still a work in progress, but a version of this pipeline has successfully been applied to several billions of tokens large corpora.
 
-# Download
+# Newer and substantially better version of the parser
+
+A new take on the trusty old Finnish-dep-parser with pretrained models for more than 50 languages is available at https://turkunlp.github.io/Turku-neural-parser-pipeline/. The new pipeline is fully neural and has a substantially better accuracy in all layers of prediction (segmentation, morphological tagging, syntax, lemmatization).
+
+# Download (old version)
 
 Choose whichever option suits you best:
 
